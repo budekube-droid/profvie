@@ -149,51 +149,20 @@
         .trust-number { font-size: 2.5rem; font-weight: 800; background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .trust-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; }
 
-        /* MOBILE STYLES */
         @media (max-width: 768px) {
-            nav {
-                padding: 0.8rem 1.5rem;
-                flex-wrap: wrap;
-            }
-            .nav-links {
-                display: none;
-            }
-            .logo {
-                font-size: 1.2rem;
-            }
-            .btn {
-                padding: 0.6rem 1.4rem;
-                font-size: 0.7rem;
-            }
-            .hero {
-                padding: 6rem 1.2rem 3rem;
-            }
-            .hero-title {
-                font-size: clamp(2.2rem, 10vw, 3.5rem);
-            }
-            .hero-sub {
-                font-size: 1rem;
-                padding: 0 0.5rem;
-            }
-            .section {
-                padding: 4rem 1.2rem;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            .pricing-card.featured {
-                transform: scale(1);
-            }
-            .trust-bar {
-                gap: 1.5rem;
-            }
-            .trust-number {
-                font-size: 2rem;
-            }
-            footer {
-                padding: 2rem 1rem;
-            }
+            nav { padding: 0.8rem 1.5rem; flex-wrap: wrap; }
+            .nav-links { display: none; }
+            .logo { font-size: 1.2rem; }
+            .btn { padding: 0.6rem 1.4rem; font-size: 0.7rem; }
+            .hero { padding: 6rem 1.2rem 3rem; }
+            .hero-title { font-size: clamp(2.2rem, 10vw, 3.5rem); }
+            .hero-sub { font-size: 1rem; padding: 0 0.5rem; }
+            .section { padding: 4rem 1.2rem; }
+            .grid { grid-template-columns: 1fr; gap: 1.5rem; }
+            .pricing-card.featured { transform: scale(1); }
+            .trust-bar { gap: 1.5rem; }
+            .trust-number { font-size: 2rem; }
+            footer { padding: 2rem 1rem; }
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -224,7 +193,6 @@
             <a href="#contact" class="btn btn-primary reveal">Zacznij projekt →</a>
         </header>
 
-        <!-- Social proof (bez liczby projektów) -->
         <section class="section" style="padding-top: 2rem; padding-bottom: 2rem;">
             <div class="trust-bar reveal">
                 <div class="trust-item">
@@ -323,7 +291,6 @@
         <footer>© 2026 Profvie — Strony, które pracują na Twój sukces.</footer>
     </div>
 
-    <!-- Three.js z CDN -->
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
@@ -335,7 +302,7 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 0, 14); // Odrobina dalej
+        camera.position.set(0, 0, 14);
 
         const mouse = new THREE.Vector2(0,0);
         window.addEventListener('mousemove', (e) => {
@@ -343,34 +310,78 @@
             mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
         });
 
-        // Gwiazdy
-        function makeStars(count, radius, color, sizeMin, sizeMax) {
-            const geom = new THREE.BufferGeometry();
-            const pos = new Float32Array(count * 3);
-            for (let i=0; i<count; i++) {
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2*Math.random()-1);
-                const r = radius * (0.7 + Math.random()*0.6);
-                pos[i*3] = Math.cos(theta)*Math.sin(phi)*r;
-                pos[i*3+1] = Math.sin(theta)*Math.sin(phi)*r;
-                pos[i*3+2] = Math.cos(phi)*r;
-            }
-            geom.setAttribute('position', new THREE.BufferAttribute(pos,3));
-            const mat = new THREE.PointsMaterial({ 
-                color, size:0.08, blending:THREE.AdditiveBlending,
-                depthWrite:false, transparent:true, opacity:0.8 
-            });
-            return new THREE.Points(geom, mat);
+        // Tekstura gwiazdy (canvas radial gradient)
+        function createStarTexture(innerColor, outerColor, size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const gradient = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+            gradient.addColorStop(0, innerColor);
+            gradient.addColorStop(0.5, innerColor);
+            gradient.addColorStop(1, outerColor);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            return new THREE.CanvasTexture(canvas);
         }
-        const starsFar = makeStars(300, 18, 0xaaccff, 0.02, 0.06);
-        const starsNear = makeStars(150, 14, 0xffffff, 0.04, 0.09);
-        scene.add(starsFar);
-        scene.add(starsNear);
 
-        // Pył
+        const starTexture1 = createStarTexture('rgba(255, 255, 255, 1)', 'rgba(255, 255, 255, 0)', 64);
+        const starTexture2 = createStarTexture('rgba(180, 200, 255, 1)', 'rgba(180, 200, 255, 0)', 64);
+        const starTexture3 = createStarTexture('rgba(255, 220, 180, 1)', 'rgba(255, 220, 180, 0)', 64);
+
+        // Realistyczne gwiazdy z poświatą
+        function makeRealStars(count, radius, texture, sizeMin, sizeMax, color) {
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(count * 3);
+            const sizes = new Float32Array(count);
+            const colors = new Float32Array(count * 3);
+            
+            for (let i = 0; i < count; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const r = radius * (0.7 + Math.random() * 0.6);
+                positions[i*3] = Math.cos(theta) * Math.sin(phi) * r;
+                positions[i*3+1] = Math.sin(theta) * Math.sin(phi) * r;
+                positions[i*3+2] = Math.cos(phi) * r;
+                
+                sizes[i] = sizeMin + Math.random() * (sizeMax - sizeMin);
+                
+                // lekkie różnice w kolorze
+                const shade = 0.7 + Math.random() * 0.3;
+                colors[i*3] = color.r * shade;
+                colors[i*3+1] = color.g * shade;
+                colors[i*3+2] = color.b * shade;
+            }
+            
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const material = new THREE.PointsMaterial({
+                map: texture,
+                size: 0.25,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                transparent: true,
+                vertexColors: true,
+                opacity: 0.9,
+            });
+            
+            return new THREE.Points(geometry, material);
+        }
+
+        const starsWhite = makeRealStars(200, 20, starTexture1, 0.03, 0.08, {r:1, g:1, b:1});
+        const starsBlue = makeRealStars(150, 18, starTexture2, 0.04, 0.09, {r:0.7, g:0.8, b:1});
+        const starsGold = makeRealStars(100, 22, starTexture3, 0.03, 0.07, {r:1, g:0.9, b:0.7});
+        
+        scene.add(starsWhite);
+        scene.add(starsBlue);
+        scene.add(starsGold);
+
+        // Pył (subtelny)
         const dustGeom = new THREE.BufferGeometry();
-        const dustPos = new Float32Array(400 * 3);
-        for (let i=0; i<400*3; i+=3) {
+        const dustPos = new Float32Array(300 * 3);
+        for (let i=0; i<300*3; i+=3) {
             dustPos[i] = (Math.random()-0.5)*14;
             dustPos[i+1] = (Math.random()-0.5)*7;
             dustPos[i+2] = (Math.random()-0.5)*8 - 1;
@@ -378,92 +389,85 @@
         dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos,3));
         const dustMat = new THREE.PointsMaterial({ 
             color:0x8899cc, size:0.03, blending:THREE.AdditiveBlending,
-            depthWrite:false, transparent:true, opacity:0.4 
+            depthWrite:false, transparent:true, opacity:0.3,
+            map: starTexture2
         });
         const dust = new THREE.Points(dustGeom, dustMat);
         scene.add(dust);
 
-        // Chromowany, płynny napis 3D – grubszy, oddalony, falujący jak ciecz
+        // Chromowany napis 3D – statyczny, bez animacji
         let textMesh;
         const fontLoader = new THREE.FontLoader();
         fontLoader.load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/fonts/helvetiker_regular.typeface.json', function(font) {
             const textGeom = new THREE.TextGeometry('PROFVIE', {
                 font: font,
-                size: 0.9,             // mniejszy
-                height: 0.25,           // grubszy
-                curveSegments: 32,      // bardzo gładki
+                size: 0.9,
+                height: 0.25,
+                curveSegments: 32,
                 bevelEnabled: true,
                 bevelThickness: 0.04,
                 bevelSize: 0.04,
             });
             textGeom.center();
             
-            // Vertex shader z deformacją płynną
-            const vertexShader = `
-                uniform float uTime;
-                varying vec3 vNormal;
-                varying vec3 vPosition;
-                void main() {
-                    // Płynna deformacja wierzchołków (fala sinusoidalna)
-                    vec3 pos = position;
-                    float wave = sin(pos.x * 4.0 + uTime * 2.0) * cos(pos.z * 4.0 + uTime * 1.5) * 0.08;
-                    wave += sin(pos.y * 5.0 + uTime * 2.5) * 0.04;
-                    vec3 newPos = pos + normal * wave;
-                    
-                    vNormal = normalize(normalMatrix * normal);
-                    vPosition = (modelViewMatrix * vec4(newPos, 1.0)).xyz;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
-                }
-            `;
-
-            const fragmentShader = `
-                uniform float uTime;
-                varying vec3 vNormal;
-                varying vec3 vPosition;
-                void main() {
-                    vec3 light1 = normalize(vec3(1.0,0.8,1.0));
-                    vec3 light2 = normalize(vec3(-0.5,-0.3,-1.0));
-                    vec3 normal = normalize(vNormal);
-                    float diff1 = max(dot(normal,light1),0.0);
-                    float diff2 = max(dot(normal,light2),0.0);
-                    float fresnel = pow(1.0-abs(dot(normal,normalize(-vPosition))),3.0);
-                    vec3 chromeBase = vec3(0.72,0.75,0.82);
-                    vec3 chromeDark = vec3(0.3,0.33,0.4);
-                    vec3 chromeHighlight = vec3(0.95,0.97,1.0);
-                    float env = sin(vPosition.y*4.0 + uTime*0.3)*0.5+0.5;
-                    vec3 color = mix(chromeDark, chromeBase, env);
-                    color += chromeHighlight * diff1 * 0.8;
-                    color += chromeHighlight * diff2 * 0.4;
-                    color = mix(color, chromeHighlight, fresnel*0.7);
-                    gl_FragColor = vec4(color,1.0);
-                }
-            `;
-
             const material = new THREE.ShaderMaterial({
-                vertexShader: vertexShader,
-                fragmentShader: fragmentShader,
-                uniforms: { uTime: { value: 0 } },
+                vertexShader: `
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    void main() {
+                        vNormal = normalize(normalMatrix * normal);
+                        vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    void main() {
+                        vec3 light1 = normalize(vec3(1.0, 0.8, 1.0));
+                        vec3 light2 = normalize(vec3(-0.5, -0.3, -1.0));
+                        vec3 normal = normalize(vNormal);
+                        float diff1 = max(dot(normal, light1), 0.0);
+                        float diff2 = max(dot(normal, light2), 0.0);
+                        float fresnel = pow(1.0 - abs(dot(normal, normalize(-vPosition))), 3.0);
+                        
+                        vec3 chromeBase = vec3(0.72, 0.75, 0.82);
+                        vec3 chromeDark = vec3(0.3, 0.33, 0.4);
+                        vec3 chromeHighlight = vec3(0.95, 0.97, 1.0);
+                        
+                        float env = sin(vPosition.y * 4.0) * 0.5 + 0.5;
+                        vec3 color = mix(chromeDark, chromeBase, env);
+                        color += chromeHighlight * diff1 * 0.8;
+                        color += chromeHighlight * diff2 * 0.4;
+                        color = mix(color, chromeHighlight, fresnel * 0.7);
+                        
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `,
                 side: THREE.DoubleSide
             });
+            
             textMesh = new THREE.Mesh(textGeom, material);
-            textMesh.position.set(0, 0.1, -2.5); // w oddali
+            textMesh.position.set(0, 0.1, -2.5);
             scene.add(textMesh);
         });
 
         function animate() {
             requestAnimationFrame(animate);
-            if (textMesh) {
-                textMesh.material.uniforms.uTime.value += 0.02;
-                // Subtelny obrót całości
-                textMesh.rotation.y += 0.001;
-                textMesh.rotation.x = Math.sin(Date.now() * 0.0004) * 0.05;
-            }
-            starsFar.rotation.y += 0.00008;
-            starsNear.rotation.y -= 0.00012;
-            dust.rotation.y += 0.0002;
+            
+            // Delikatny obrót gwiazd i pyłu
+            starsWhite.rotation.y += 0.00005;
+            starsBlue.rotation.y -= 0.00007;
+            starsGold.rotation.x += 0.00003;
+            dust.rotation.y += 0.0001;
+            
+            // Napis pozostaje idealnie nieruchomy
+            // Nic nie zmieniamy dla textMesh
+            
             camera.position.x += (mouse.x * 1.2 - camera.position.x) * 0.02;
             camera.position.y += (-mouse.y * 0.8 - camera.position.y) * 0.02;
             camera.lookAt(0, 0, 0);
+            
             renderer.render(scene, camera);
         }
         animate();
