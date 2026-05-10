@@ -1,860 +1,446 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profvie — Strona internetowa dla Twojej firmy</title>
-<meta name="description" content="Tworzymy strony, które zarabiają. Nie szablony — prawdziwe projekty dla firm, które chcą być numerem jeden w swojej branży.">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#04040a;
-  --glass:rgba(255,255,255,0.03);
-  --glass2:rgba(255,255,255,0.06);
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.14);
-  --text:#e8e8f0;
-  --muted:#666680;
-  --white:#ffffff;
-  --f:'Manrope',sans-serif;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text);font-family:var(--f);overflow-x:hidden;line-height:1.7}
-
-/* ═══════════════════════════════════
-   3D CANVAS BACKGROUND
-═══════════════════════════════════ */
-#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-
-/* ═══════════════════════════════════
-   GLOBAL LAYOUT
-═══════════════════════════════════ */
-.page{position:relative;z-index:1}
-
-/* ═══════════════════════════════════
-   NAV — glassmorphism
-═══════════════════════════════════ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:300;
-  height:64px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 2.5rem;
-  background:rgba(4,4,10,0.6);
-  backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--border);
-  transition:background 0.3s;
-}
-.logo{font-size:1rem;font-weight:800;color:#fff;letter-spacing:0.08em;text-transform:uppercase}
-.logo span{color:var(--muted)}
-.nav-pills{display:flex;gap:0.375rem}
-.pill{
-  background:var(--glass);border:1px solid var(--border);
-  color:var(--muted);font-family:var(--f);font-size:11px;font-weight:600;
-  letter-spacing:0.1em;text-transform:uppercase;padding:0.5rem 1rem;
-  cursor:pointer;transition:all 0.25s;border-radius:100px;
-}
-.pill:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3);color:#fff}
-.pill-main{
-  background:linear-gradient(135deg,rgba(255,255,255,0.9),rgba(255,255,255,1));
-  border-color:transparent;color:#04040a;font-weight:700;
-}
-.pill-main:hover{background:#fff;transform:translateY(-1px);box-shadow:0 8px 32px rgba(255,255,255,0.15)}
-
-/* ═══════════════════════════════════
-   HERO
-═══════════════════════════════════ */
-.hero{
-  min-height:100vh;display:flex;flex-direction:column;
-  justify-content:center;padding:8rem 2.5rem 5rem;
-  position:relative;overflow:hidden;
-}
-.hero-tag{
-  display:inline-flex;align-items:center;gap:0.6rem;
-  font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;
-  color:rgba(255,255,255,0.4);margin-bottom:2.5rem;
-  opacity:0;animation:fadeUp 0.6s ease 0.2s forwards;
-}
-.pulse-dot{width:7px;height:7px;background:#fff;border-radius:50%;position:relative}
-.pulse-dot::after{
-  content:'';position:absolute;inset:-4px;border:1px solid rgba(255,255,255,0.4);
-  border-radius:50%;animation:pulseRing 2s ease-in-out infinite;
-}
-@keyframes pulseRing{0%{transform:scale(1);opacity:0.6}100%{transform:scale(2.2);opacity:0}}
-
-h1{
-  font-size:clamp(2.8rem,7vw,6.5rem);font-weight:800;
-  line-height:1.0;letter-spacing:-0.04em;color:#fff;
-  max-width:860px;margin-bottom:0;
-  opacity:0;animation:fadeUp 0.7s ease 0.3s forwards;
-}
-h1 .dim{color:rgba(255,255,255,0.18);display:block}
-.hero-line-sep{
-  width:0;height:1px;background:linear-gradient(90deg,#fff,transparent);
-  margin:2.5rem 0;animation:lineGrow 0.8s ease 0.7s forwards;
-}
-@keyframes lineGrow{to{width:80px}}
-.hero-sub{
-  font-size:1.05rem;color:var(--muted);max-width:520px;
-  line-height:1.9;font-weight:400;margin-bottom:3rem;
-  opacity:0;animation:fadeUp 0.6s ease 0.6s forwards;
-}
-.hero-sub strong{color:rgba(255,255,255,0.85);font-weight:600}
-.hero-actions{
-  display:flex;gap:1rem;flex-wrap:wrap;
-  opacity:0;animation:fadeUp 0.6s ease 0.75s forwards;
-}
-.btn-primary{
-  background:#fff;color:#04040a;font-size:13px;font-weight:700;
-  letter-spacing:0.06em;padding:1rem 2rem;border:none;cursor:pointer;
-  border-radius:100px;display:inline-flex;align-items:center;gap:0.6rem;
-  transition:all 0.3s;position:relative;overflow:hidden;
-}
-.btn-primary::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,transparent 30%,rgba(255,255,255,0.4),transparent 70%);
-  transform:translateX(-100%);transition:transform 0.5s;
-}
-.btn-primary:hover::before{transform:translateX(100%)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 48px rgba(255,255,255,0.15)}
-.btn-secondary{
-  background:var(--glass);color:rgba(255,255,255,0.6);font-size:13px;font-weight:500;
-  padding:1rem 1.75rem;border:1px solid var(--border2);cursor:pointer;
-  border-radius:100px;transition:all 0.25s;
-}
-.btn-secondary:hover{background:var(--glass2);color:#fff;border-color:rgba(255,255,255,0.3)}
-
-/* TRUST BAR */
-.trust-bar{
-  display:flex;gap:2rem;padding-top:3.5rem;
-  border-top:1px solid var(--border);flex-wrap:wrap;
-  opacity:0;animation:fadeUp 0.6s ease 0.9s forwards;
-}
-.trust-item{display:flex;align-items:center;gap:0.75rem}
-.trust-icon{
-  width:38px;height:38px;
-  background:var(--glass);border:1px solid var(--border);
-  border-radius:10px;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:all 0.3s;
-}
-.trust-item:hover .trust-icon{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2);transform:scale(1.1)}
-.trust-icon svg{width:15px;height:15px;stroke:rgba(255,255,255,0.7);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.trust-text .t1{font-size:13px;font-weight:700;color:#fff}
-.trust-text .t2{font-size:11px;color:var(--muted)}
-
-/* ═══════════════════════════════════
-   SECTIONS COMMON
-═══════════════════════════════════ */
-section{position:relative;z-index:1}
-.section-kicker{
-  font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:1.25rem;
-  display:flex;align-items:center;gap:0.75rem;
-}
-.section-kicker::before{content:'';width:16px;height:1px;background:rgba(255,255,255,0.2)}
-h2{
-  font-size:clamp(1.8rem,4vw,3.2rem);font-weight:800;
-  letter-spacing:-0.03em;color:#fff;line-height:1.08;margin-bottom:1.25rem;
-}
-
-/* ═══════════════════════════════════
-   GLASS CARD MIXIN
-═══════════════════════════════════ */
-.gcard{
-  background:var(--glass);
-  border:1px solid var(--border);
-  backdrop-filter:blur(12px);
-  transition:all 0.35s cubic-bezier(0.22,1,0.36,1);
-  position:relative;overflow:hidden;
-}
-.gcard::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,0.04),transparent 60%);
-  pointer-events:none;
-}
-.gcard:hover{
-  background:rgba(255,255,255,0.06);
-  border-color:rgba(255,255,255,0.18);
-  transform:translateY(-4px);
-  box-shadow:0 24px 64px rgba(0,0,0,0.4),0 0 0 1px rgba(255,255,255,0.05);
-}
-
-/* ═══════════════════════════════════
-   PROBLEM SECTION
-═══════════════════════════════════ */
-.problem{padding:8rem 2.5rem}
-.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem}
-.prob-card{
-  padding:2.5rem 2rem;
-  transition:all 0.35s cubic-bezier(0.22,1,0.36,1);
-}
-.prob-card::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent);
-  transform:scaleX(0);transition:transform 0.35s;
-}
-.prob-card:hover::after{transform:scaleX(1)}
-.prob-num{
-  font-size:3.5rem;font-weight:800;
-  color:rgba(255,255,255,0.04);margin-bottom:1.5rem;line-height:1;
-  transition:color 0.3s;
-}
-.prob-card:hover .prob-num{color:rgba(255,255,255,0.08)}
-.prob-q{font-size:1rem;font-weight:700;color:#fff;margin-bottom:0.75rem;line-height:1.4}
-.prob-a{font-size:0.875rem;color:var(--muted);line-height:1.85}
-
-/* ═══════════════════════════════════
-   WHY US
-═══════════════════════════════════ */
-.why{
-  padding:8rem 2.5rem;
-  background:linear-gradient(180deg,transparent,rgba(255,255,255,0.015),transparent);
-}
-.why-inner{display:grid;grid-template-columns:1fr 1fr;gap:7rem;align-items:start}
-.why-left p{color:var(--muted);font-size:1rem;line-height:1.9;max-width:400px}
-.why-list{display:flex;flex-direction:column;gap:0}
-.why-item{
-  padding:1.5rem 1rem;border-bottom:1px solid var(--border);
-  display:grid;grid-template-columns:36px 1fr;gap:1rem;align-items:start;
-  transition:all 0.25s;cursor:default;border-radius:8px;
-}
-.why-item:first-child{border-top:1px solid var(--border)}
-.why-item:hover{background:var(--glass);padding-left:1.5rem}
-.why-check{
-  width:28px;height:28px;background:var(--glass);border:1px solid var(--border2);
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;margin-top:3px;transition:all 0.25s;
-}
-.why-item:hover .why-check{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3)}
-.why-check svg{width:11px;height:11px;stroke:rgba(255,255,255,0.7);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.why-title{font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.25rem}
-.why-desc{font-size:0.82rem;color:var(--muted);line-height:1.7}
-
-/* ═══════════════════════════════════
-   PROCESS
-═══════════════════════════════════ */
-.process{padding:8rem 2.5rem}
-.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:4rem}
-.step{padding:2rem 1.75rem;text-align:center}
-.step-num{
-  width:56px;height:56px;margin:0 auto 1.5rem;
-  background:var(--glass);border:1px solid var(--border2);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:800;color:#fff;
-  transition:all 0.3s;position:relative;
-}
-.step-num::before{
-  content:'';position:absolute;inset:-4px;border-radius:50%;
-  border:1px solid transparent;
-  background:linear-gradient(var(--bg),var(--bg)) padding-box,
-             linear-gradient(135deg,rgba(255,255,255,0.3),transparent) border-box;
-  opacity:0;transition:opacity 0.3s;
-}
-.step:hover .step-num{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.3)}
-.step:hover .step-num::before{opacity:1}
-.step-title{font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.5rem}
-.step-desc{font-size:0.8rem;color:var(--muted);line-height:1.75}
-
-/* ═══════════════════════════════════
-   PRICING
-═══════════════════════════════════ */
-.pricing{
-  padding:8rem 2.5rem;
-  background:linear-gradient(180deg,transparent,rgba(255,255,255,0.01),transparent);
-}
-.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:4rem}
-.price-card{padding:2.5rem 2rem}
-.price-card.feat{
-  background:rgba(255,255,255,0.06);
-  border-color:rgba(255,255,255,0.2);
-  box-shadow:0 0 80px rgba(255,255,255,0.04);
-}
-.price-card.feat::before{
-  background:linear-gradient(135deg,rgba(255,255,255,0.07),transparent 50%);
-}
-.feat-badge{
-  display:inline-block;background:#fff;color:#04040a;
-  font-size:9px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;
-  padding:3px 10px;border-radius:100px;margin-bottom:1.25rem;
-}
-.pc-tier{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem}
-.pc-price{font-size:3rem;font-weight:800;color:#fff;line-height:1;margin-bottom:0.25rem}
-.pc-price span{font-size:1rem;font-weight:400;color:var(--muted)}
-.pc-sub{font-size:0.8rem;color:var(--muted);margin-bottom:2rem}
-.pc-features{list-style:none;display:flex;flex-direction:column;gap:0.65rem;margin-bottom:2.5rem}
-.pc-features li{font-size:0.83rem;color:var(--text);display:flex;gap:0.6rem;align-items:flex-start}
-.pc-features li::before{content:'✓';color:rgba(255,255,255,0.35);font-size:10px;font-weight:800;margin-top:0.2rem;flex-shrink:0}
-.pc-btn{
-  width:100%;background:var(--glass);color:#fff;font-size:12px;font-weight:700;
-  letter-spacing:0.1em;text-transform:uppercase;padding:0.9rem;
-  border:1px solid var(--border2);cursor:pointer;transition:all 0.25s;border-radius:8px;
-}
-.price-card.feat .pc-btn{background:rgba(255,255,255,0.9);color:#04040a;border-color:transparent}
-.pc-btn:hover{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.3)}
-.price-card.feat .pc-btn:hover{background:#fff}
-
-/* ═══════════════════════════════════
-   FAQ
-═══════════════════════════════════ */
-.faq{padding:8rem 2.5rem}
-.faq-list{max-width:700px;margin-top:4rem}
-.faq-item{border-bottom:1px solid var(--border)}
-.faq-q{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0;cursor:pointer;gap:1rem;transition:padding-left 0.2s}
-.faq-q:hover{padding-left:0.5rem}
-.faq-q-text{font-size:0.95rem;font-weight:700;color:#fff}
-.faq-icon{
-  width:28px;height:28px;border:1px solid var(--border2);border-radius:50%;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  font-size:16px;color:var(--muted);transition:all 0.3s;
-}
-.faq-item.open .faq-icon{background:#fff;color:#04040a;border-color:#fff;transform:rotate(45deg)}
-.faq-a{font-size:0.875rem;color:var(--muted);line-height:1.85;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.4s ease}
-.faq-item.open .faq-a{max-height:300px;padding-bottom:1.5rem}
-
-/* ═══════════════════════════════════
-   CTA BAND
-═══════════════════════════════════ */
-.cta-band{
-  padding:8rem 2.5rem;text-align:center;position:relative;overflow:hidden;
-}
-.cta-band::before{
-  content:'';position:absolute;
-  width:600px;height:600px;left:50%;top:50%;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(255,255,255,0.04),transparent 70%);
-  pointer-events:none;
-}
-.cta-band h2{max-width:700px;margin:0 auto 1.5rem}
-.cta-band p{color:var(--muted);font-size:1rem;max-width:460px;margin:0 auto 3rem;line-height:1.85}
-
-/* ═══════════════════════════════════
-   FOOTER
-═══════════════════════════════════ */
-footer{
-  padding:2.5rem;display:flex;justify-content:space-between;align-items:center;
-  border-top:1px solid var(--border);flex-wrap:wrap;gap:1rem;
-  background:rgba(255,255,255,0.015);
-}
-.foot-logo{font-size:0.95rem;font-weight:800;color:#fff;letter-spacing:0.08em;text-transform:uppercase}
-.foot-logo span{color:var(--muted)}
-.foot-copy{font-size:11px;color:var(--muted);letter-spacing:0.05em}
-
-/* ═══════════════════════════════════
-   MODAL
-═══════════════════════════════════ */
-.overlay{
-  position:fixed;inset:0;z-index:500;
-  background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;
-  padding:1.5rem;pointer-events:none;transition:background 0.35s;
-  backdrop-filter:blur(0px);transition:all 0.35s;
-}
-.overlay.open{background:rgba(0,0,0,0.75);pointer-events:all;backdrop-filter:blur(8px)}
-.modal{
-  background:rgba(12,12,20,0.95);border:1px solid var(--border2);
-  width:100%;max-width:640px;max-height:90vh;overflow-y:auto;
-  transform:translateY(24px) scale(0.97);opacity:0;
-  transition:all 0.4s cubic-bezier(0.22,1,0.36,1);
-  border-radius:16px;
-  box-shadow:0 48px 120px rgba(0,0,0,0.6),0 0 0 1px rgba(255,255,255,0.04);
-}
-.overlay.open .modal{transform:translateY(0) scale(1);opacity:1}
-.modal-head{
-  padding:2rem 2rem 1.5rem;border-bottom:1px solid var(--border);
-  display:flex;justify-content:space-between;align-items:center;
-}
-.modal-title{font-size:1.3rem;font-weight:800;color:#fff;letter-spacing:-0.02em}
-.modal-x{
-  width:32px;height:32px;background:var(--glass);border:1px solid var(--border);
-  color:var(--muted);border-radius:50%;cursor:pointer;font-size:16px;
-  display:flex;align-items:center;justify-content:center;transition:all 0.2s;
-}
-.modal-x:hover{background:#fff;color:#04040a;border-color:#fff}
-.modal-body{padding:2rem}
-.modal-cta{
-  width:100%;background:#fff;color:#04040a;font-size:13px;font-weight:700;
-  letter-spacing:0.1em;text-transform:uppercase;padding:1rem;border:none;
-  cursor:pointer;transition:all 0.2s;margin-top:1.5rem;border-radius:8px;
-}
-.modal-cta:hover{background:#e8e8e8;transform:translateY(-1px)}
-
-/* Modal content */
-.svc-row{display:flex;justify-content:space-between;align-items:flex-start;gap:1.5rem;padding:1.25rem 0;border-bottom:1px solid var(--border)}
-.svc-row:last-of-type{border-bottom:none}
-.svc-name{font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.3rem}
-.svc-desc{font-size:0.8rem;color:var(--muted);line-height:1.7}
-.svc-p{font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.6);white-space:nowrap}
-.m-plan{border:1px solid var(--border);padding:1.25rem 1.5rem;margin-bottom:0.75rem;cursor:pointer;transition:all 0.2s;border-radius:10px}
-.m-plan:hover,.m-plan.sel{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.03)}
-.m-plan-top{display:flex;justify-content:space-between;margin-bottom:0.4rem}
-.m-plan-name{font-size:0.85rem;font-weight:700;color:#fff}
-.m-plan-price{font-size:1.1rem;font-weight:800;color:#fff}
-.m-plan-desc{font-size:0.78rem;color:var(--muted)}
-.m-step{display:grid;grid-template-columns:40px 1fr;gap:1rem;padding:1.25rem 0;border-bottom:1px solid var(--border)}
-.m-step:last-child{border-bottom:none}
-.m-step-n{font-size:1.2rem;font-weight:800;color:rgba(255,255,255,0.1)}
-.m-step-t{font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.3rem}
-.m-step-d{font-size:0.8rem;color:var(--muted);line-height:1.7}
-.cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem}
-.cf-f{display:flex;flex-direction:column;gap:0.3rem}
-.cf-f.full{grid-column:span 2}
-.cf-f label{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
-.cf-f input,.cf-f textarea,.cf-f select{
-  background:rgba(255,255,255,0.04);border:1px solid var(--border2);
-  color:#fff;padding:0.75rem 1rem;font-family:var(--f);font-size:0.875rem;
-  outline:none;transition:border-color 0.2s;width:100%;border-radius:8px;
-}
-.cf-f input:focus,.cf-f textarea:focus,.cf-f select:focus{border-color:rgba(255,255,255,0.4)}
-.cf-f textarea{resize:vertical;min-height:90px}
-.cf-f select option{background:#0e0e18}
-.cf-err{display:none;padding:0.6rem 0.9rem;background:rgba(220,50,50,0.08);border:1px solid rgba(220,50,50,0.2);color:#e08080;font-size:0.8rem;margin-bottom:0.75rem;border-radius:6px}
-
-/* ═══════════════════════════════════
-   SCROLL REVEAL
-═══════════════════════════════════ */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity 0.7s ease,transform 0.7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:0.1s}
-.reveal-delay-2{transition-delay:0.2s}
-.reveal-delay-3{transition-delay:0.3s}
-.reveal-delay-4{transition-delay:0.4s}
-
-/* ═══════════════════════════════════
-   ANIMATIONS
-═══════════════════════════════════ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-
-/* ═══════════════════════════════════
-   RESPONSIVE
-═══════════════════════════════════ */
-@media(max-width:900px){
-  nav{padding:0 1.25rem}
-  .pill:not(.pill-main){display:none}
-  .hero{padding:6rem 1.25rem 3rem}
-  h1{font-size:clamp(2.2rem,10vw,3.2rem)}
-  .hero-sub{font-size:0.95rem}
-  .trust-bar{gap:1.25rem}
-  .trust-text .t2{display:none}
-  .problem{padding:5rem 1.25rem}
-  .problem-grid{grid-template-columns:1fr;gap:1rem}
-  .why{padding:5rem 1.25rem}
-  .why-inner{grid-template-columns:1fr;gap:3rem}
-  .process{padding:5rem 1.25rem}
-  .process-steps{grid-template-columns:1fr 1fr;gap:1rem}
-  .pricing{padding:5rem 1.25rem}
-  .pricing-grid{grid-template-columns:1fr;gap:1rem}
-  .faq{padding:5rem 1.25rem}
-  .cta-band{padding:5rem 1.25rem}
-  footer{padding:2rem 1.25rem}
-  .overlay{padding:0;align-items:flex-end}
-  .modal{border-radius:16px 16px 0 0;max-height:92vh}
-  .cf-grid{grid-template-columns:1fr}
-  .cf-f.full{grid-column:span 1}
-}
-@media(max-width:480px){
-  h1{font-size:2.1rem}
-  .hero-actions{flex-direction:column}
-  .btn-primary,.btn-secondary{width:100%;justify-content:center}
-  .process-steps{grid-template-columns:1fr}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profvie — Strony internetowe, które sprzedają</title>
+    <meta name="description" content="Projektujemy strony internetowe, które zwiększają zyski Twojej firmy. Wycena w 24h, realizacja w 7 dni. Sprawdź!">
+    <style>
+        :root {
+            --bg: #03050a;
+            --text: #fff;
+            --text-secondary: rgba(255,255,255,0.6);
+            --chrome: linear-gradient(135deg, #c0c5ce, #8d94a5, #e2e6ef, #a4abb8);
+            --radius: 2rem;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        canvas#bg {
+            position: fixed; top:0; left:0;
+            width:100%; height:100%;
+            z-index:0; pointer-events: none;
+        }
+        .page { position:relative; z-index:2; }
+        nav {
+            position: fixed; top:0; left:0; right:0; z-index:100;
+            display: flex; align-items:center; justify-content:space-between;
+            padding: 1rem 3rem;
+            background: rgba(3,5,10,0.5);
+            backdrop-filter: blur(30px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .logo {
+            font-family: 'Satoshi', sans-serif;
+            font-size: 1.4rem; font-weight:900; letter-spacing:0.12em;
+            text-transform: uppercase; text-decoration:none;
+            background: var(--chrome);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(180,200,255,0.5));
+        }
+        .logo em { font-style:normal; opacity:0.6; }
+        .nav-links { display:flex; gap:2.5rem; }
+        .nav-links a {
+            text-decoration:none; font-size:0.8rem; font-weight:600;
+            text-transform:uppercase; color: var(--text-secondary);
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color:#fff; text-shadow:0 0 10px rgba(255,255,255,0.3); }
+        .btn {
+            padding:0.7rem 2rem; border-radius:100px; font-size:0.75rem;
+            font-weight:700; text-transform:uppercase; letter-spacing:0.08em;
+            border:1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05); color:#fff;
+            backdrop-filter: blur(10px); text-decoration:none;
+            transition: all 0.4s; display:inline-flex; align-items:center; gap:0.4rem;
+        }
+        .btn:hover { background:rgba(255,255,255,0.15); border-color:rgba(255,255,255,0.4); }
+        .btn-primary {
+            background: linear-gradient(135deg, #2a2f3d, #1a1e28);
+            border-color: rgba(255,255,255,0.25);
+        }
+        .hero {
+            min-height:100vh; display:flex; flex-direction:column;
+            align-items:center; justify-content:center; text-align:center;
+            padding:8rem 2rem 5rem;
+        }
+        .hero-badge {
+            font-size:0.7rem; text-transform:uppercase; letter-spacing:0.25em;
+            color:#b0b8c8; background:rgba(200,210,230,0.08);
+            padding:0.4rem 1.5rem; border-radius:100px; margin-bottom:2rem;
+            border:1px solid rgba(255,255,255,0.1);
+        }
+        .hero-title {
+            font-family:'Satoshi', sans-serif;
+            font-size:clamp(3rem,7vw,5.5rem); font-weight:800;
+            line-height:1.05; max-width:900px; margin-bottom:2rem;
+        }
+        .chrome-text {
+            background: var(--chrome);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(200,210,240,0.6));
+        }
+        .hero-sub { font-size:1.25rem; color:var(--text-secondary); max-width:650px; margin-bottom:3rem; }
+        .section { padding:6rem 2rem; display:flex; flex-direction:column; align-items:center; }
+        .section-label {
+            font-size:0.7rem; font-weight:700; letter-spacing:0.25em;
+            text-transform:uppercase; color:#a0a8c0;
+            background:rgba(255,255,255,0.05); padding:0.3rem 1.2rem;
+            border-radius:100px; margin-bottom:1.5rem;
+        }
+        .section-title {
+            font-family:'Satoshi', sans-serif;
+            font-size:clamp(2rem,4vw,3.5rem); font-weight:700;
+            margin-bottom:3rem; text-align:center;
+        }
+        .grid {
+            display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:2rem; width:100%; max-width:1200px;
+        }
+        .card {
+            background:rgba(10,15,25,0.55); backdrop-filter:blur(20px);
+            border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius);
+            padding:2.8rem 2.5rem; transition:all 0.5s; color:#fff;
+            box-shadow:0 20px 40px rgba(0,0,0,0.3);
+        }
+        .card:hover { background:rgba(20,30,45,0.7); transform:translateY(-8px); }
+        .card-icon { font-size:2rem; margin-bottom:1.5rem; }
+        .card-title { font-family:'Satoshi', sans-serif; font-size:1.5rem; font-weight:700; margin-bottom:0.8rem; }
+        .card-desc { color:var(--text-secondary); }
+        .pricing-card {
+            background:rgba(10,15,25,0.55); backdrop-filter:blur(20px);
+            border:1px solid rgba(255,255,255,0.06); border-radius:var(--radius);
+            padding:3rem 2rem; text-align:center; transition:0.5s; color:#fff;
+        }
+        .pricing-card.featured {
+            background:rgba(25,35,50,0.7); border-color:rgba(255,255,255,0.25);
+            transform:scale(1.03);
+        }
+        .pricing-tier { font-size:0.8rem; font-weight:700; text-transform:uppercase; color:#c0c8d8; margin-bottom:1rem; }
+        .pricing-amount {
+            font-family:'Satoshi', sans-serif; font-size:3.8rem; font-weight:800;
+            background:var(--chrome); -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+        }
+        .pricing-amount span { font-size:1rem; opacity:0.6; }
+        .pricing-features { list-style:none; text-align:left; margin-bottom:2.5rem; }
+        .pricing-features li { display:flex; align-items:center; gap:0.6rem; font-size:0.9rem; opacity:0.85; margin-bottom:0.7rem; }
+        .pricing-features li::before { content:'◆'; color:#b0b8c8; }
+        .contact-form { display:flex; flex-direction:column; gap:1.2rem; width:100%; max-width:550px; }
+        .form-group { display:flex; flex-direction:column; gap:0.3rem; }
+        .form-group label { font-size:0.7rem; font-weight:700; text-transform:uppercase; color:rgba(255,255,255,0.6); }
+        .form-group input, .form-group textarea {
+            padding:1rem; border:1px solid rgba(255,255,255,0.15);
+            border-radius:16px; background:rgba(255,255,255,0.05);
+            backdrop-filter:blur(10px); color:#fff; font-family:'Inter', sans-serif;
+        }
+        .reveal { opacity:0; transform:translateY(35px); transition:0.9s; }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+        footer { text-align:center; padding:3rem; color:rgba(255,255,255,0.3); border-top:1px solid rgba(255,255,255,0.05); }
+        .trust-bar {
+            display: flex; justify-content: center; gap: 3rem;
+            margin-bottom: 3rem; flex-wrap: wrap;
+        }
+        .trust-item { text-align: center; }
+        .trust-number { font-size: 2.5rem; font-weight: 800; background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .trust-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400;500;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <canvas id="bg"></canvas>
 
-<!-- 3D ANIMATED BACKGROUND -->
-<canvas id="bg-canvas"></canvas>
+    <div class="page">
+        <nav>
+            <a href="#" class="logo">PROF<em>VIE</em></a>
+            <div class="nav-links">
+                <a href="#services">Oferta</a>
+                <a href="#pricing">Cennik</a>
+                <a href="#contact">Kontakt</a>
+            </div>
+            <a href="#contact" class="btn">Bezpłatna wycena</a>
+        </nav>
 
-<div class="page">
+        <header class="hero">
+            <div class="hero-badge reveal">✦ Profesjonalne strony internetowe ✦</div>
+            <h1 class="hero-title reveal">
+                Strony, <span class="chrome-text">które zarabiają</span> dla Ciebie.
+            </h1>
+            <p class="hero-sub reveal">
+                Zapomnij o szablonach. Tworzymy unikalne narzędzia sprzedaży, które przyciągają klientów i budują zaufanie do Twojej marki.
+            </p>
+            <a href="#contact" class="btn btn-primary reveal">Zacznij projekt →</a>
+        </header>
 
-<nav>
-  <div class="logo">PROF<span>VIE</span></div>
-  <div class="nav-pills">
-    <button class="pill" onclick="openModal('uslugi')">Usługi</button>
-    <button class="pill" onclick="openModal('proces')">Proces</button>
-    <button class="pill" onclick="openModal('cennik')">Cennik</button>
-    <button class="pill pill-main" onclick="openModal('kontakt')">Zacznijmy →</button>
-  </div>
-</nav>
+        <!-- Social proof -->
+        <section class="section" style="padding-top: 2rem; padding-bottom: 2rem;">
+            <div class="trust-bar reveal">
+                <div class="trust-item">
+                    <div class="trust-number">150+</div>
+                    <div class="trust-label">Zrealizowanych projektów</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-number">98%</div>
+                    <div class="trust-label">Zadowolonych klientów</div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-number">7 dni</div>
+                    <div class="trust-label">Średni czas realizacji</div>
+                </div>
+            </div>
+        </section>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-tag"><div class="pulse-dot"></div>Dostępny dla nowych projektów</div>
-  <h1>
-    Twoi klienci decydują<br>
-    <span class="dim">w 3 sekundy.</span>
-    Wygrywaj je.
-  </h1>
-  <div class="hero-line-sep"></div>
-  <p class="hero-sub">
-    Większość firm traci klientów, zanim w ogóle zdąży się odezwać — bo ich strona wygląda jak zrobiona przez siostrzeńca w 2015 roku.<br><br>
-    <strong>Robimy strony, które wyglądają jak lider branży. Bo tak właśnie powinna wyglądać Twoja firma.</strong>
-  </p>
-  <div class="hero-actions">
-    <button class="btn-primary" onclick="openModal('kontakt')">
-      Chcę taką stronę
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap:round stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </button>
-    <button class="btn-secondary" onclick="openModal('cennik')">Zobacz ceny</button>
-  </div>
-  <div class="trust-bar">
-    <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="trust-text"><div class="t1">Gotowe w 7 dni</div><div class="t2">Nie miesiącami</div></div></div>
-    <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><div class="trust-text"><div class="t1">Odpowiedź w 24h</div><div class="t2">Bezpłatna wycena</div></div></div>
-    <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="trust-text"><div class="t1">Bez szablonów</div><div class="t2">Każda strona od zera</div></div></div>
-    <div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div><div class="trust-text"><div class="t1">Działa na telefonie</div><div class="t2">60% ruchu to mobile</div></div></div>
-  </div>
-</section>
+        <section id="services" class="section">
+            <span class="section-label reveal">Nasze usługi</span>
+            <h2 class="section-title reveal">Co zyskuje Twoja firma?</h2>
+            <div class="grid">
+                <div class="card reveal">
+                    <div class="card-icon">◈</div>
+                    <h3 class="card-title">Strona Wizytówka</h3>
+                    <p class="card-desc">Perfekcyjny wizerunek online, który wzbudza zaufanie i przyciąga klientów od pierwszego wejrzenia.</p>
+                </div>
+                <div class="card reveal">
+                    <div class="card-icon">◫</div>
+                    <h3 class="card-title">Landing Page</h3>
+                    <p class="card-desc">Skuteczna strona nastawiona na jedną konkretną akcję – zapis, zakup lub kontakt. Maksymalna konwersja.</p>
+                </div>
+                <div class="card reveal">
+                    <div class="card-icon">⬡</div>
+                    <h3 class="card-title">Sklep Internetowy</h3>
+                    <p class="card-desc">Kompleksowe e-commerce z prostym panelem zarządzania, szybkimi płatnościami i przemyślanym UX.</p>
+                </div>
+            </div>
+        </section>
 
-<!-- PROBLEM -->
-<section class="problem">
-  <div class="section-kicker reveal">Dlaczego to ważne</div>
-  <h2 class="reveal reveal-delay-1">Zła strona to nie<br>tylko estetyka.</h2>
-  <p class="reveal reveal-delay-2" style="color:var(--muted);max-width:520px;font-size:1rem;line-height:1.85">To realne pieniądze, które tracisz każdego dnia. Oto co dzieje się, kiedy klient trafi na stronę, która nie robi dobrego wrażenia:</p>
-  <div class="problem-grid">
-    <div class="prob-card gcard reveal reveal-delay-1"><div class="prob-num">01</div><div class="prob-q">Wychodzi w ciągu 3 sekund</div><p class="prob-a">Jeśli strona ładuje się wolno albo wygląda amatorsko — klient zamyka kartę i otwiera następny wynik w Google. Nigdy nie wróci.</p></div>
-    <div class="prob-card gcard reveal reveal-delay-2"><div class="prob-num">02</div><div class="prob-q">Idzie do konkurencji</div><p class="prob-a">Nie dlatego, że konkurencja jest lepsza. Dlatego, że ma lepszą stronę. W internecie wygrywa ten, kto wygląda profesjonalnie — nie ten, kto jest profesjonalny.</p></div>
-    <div class="prob-card gcard reveal reveal-delay-3"><div class="prob-num">03</div><div class="prob-q">Negocjuje cenę w dół</div><p class="prob-a">Słaba strona podważa wartość Twojej oferty. Klient, który trafi na profesjonalną stronę, rzadziej pyta "a może taniej?" — bo czuje, że trafia do eksperta.</p></div>
-  </div>
-</section>
+        <section id="pricing" class="section">
+            <span class="section-label reveal">Cennik</span>
+            <h2 class="section-title reveal">Inwestycja, która się zwraca.</h2>
+            <div class="grid" style="max-width:1000px">
+                <div class="pricing-card reveal">
+                    <div class="pricing-tier">Start</div>
+                    <div class="pricing-amount">990 <span>PLN</span></div>
+                    <ul class="pricing-features">
+                        <li>Projekt jednostronicowy</li>
+                        <li>Responsywność mobilna</li>
+                        <li>Podstawowe SEO</li>
+                        <li>Szybkie uruchomienie</li>
+                    </ul>
+                    <a href="#contact" class="btn" style="width:100%">Wybierz Start</a>
+                </div>
+                <div class="pricing-card featured reveal">
+                    <div class="pricing-tier">Business</div>
+                    <div class="pricing-amount">2490 <span>PLN</span></div>
+                    <ul class="pricing-features">
+                        <li>Do 5 podstron</li>
+                        <li>System zarządzania treścią</li>
+                        <li>Integracje social media</li>
+                        <li>Wsparcie techniczne</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary" style="width:100%">Najczęściej wybierany</a>
+                </div>
+                <div class="pricing-card reveal">
+                    <div class="pricing-tier">Custom</div>
+                    <div class="pricing-amount">Indywidualnie</div>
+                    <ul class="pricing-features">
+                        <li>Zaawansowane funkcje</li>
+                        <li>Sklepy e‑commerce</li>
+                        <li>Autorskie animacje</li>
+                        <li>Optymalizacja konwersji</li>
+                    </ul>
+                    <a href="#contact" class="btn" style="width:100%">Zapytaj o wycenę</a>
+                </div>
+            </div>
+        </section>
 
-<!-- WHY US -->
-<section class="why">
-  <div class="why-inner">
-    <div class="why-left">
-      <div class="section-kicker reveal">Dlaczego Profvie</div>
-      <h2 class="reveal reveal-delay-1">Nie robimy stron.<br>Robimy wyniki.</h2>
-      <p class="reveal reveal-delay-2">Nie sprzedajemy Ci "ładnego projektu". Robimy narzędzie, które ma jeden cel: żeby klient, który trafi na Twoją stronę — zadzwonił lub napisał.</p>
+        <section id="contact" class="section">
+            <span class="section-label reveal">Kontakt</span>
+            <h2 class="section-title reveal">Opowiedz nam o swoim projekcie.</h2>
+            <form id="projectForm" class="contact-form reveal">
+                <div class="form-group">
+                    <label>Imię i nazwisko / Firma</label>
+                    <input type="text" placeholder="Jan Kowalski" required>
+                </div>
+                <div class="form-group">
+                    <label>Adres e-mail</label>
+                    <input type="email" placeholder="jan@firma.pl" required>
+                </div>
+                <div class="form-group">
+                    <label>Czego potrzebujesz?</label>
+                    <textarea rows="4" placeholder="Opisz w kilku zdaniach swój pomysł..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top:0.8rem">Wyślij zapytanie</button>
+            </form>
+        </section>
+
+        <footer>© 2026 Profvie — Strony, które pracują na Twój sukces.</footer>
     </div>
-    <div class="why-list">
-      <div class="why-item reveal"><div class="why-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-title">Piszemy teksty, które sprzedają</div><div class="why-desc">Większość firm ma problem z tekstami. Zajmujemy się tym za Ciebie — piszemy tak, żeby klient rozumiał wartość Twojej oferty.</div></div></div>
-      <div class="why-item reveal reveal-delay-1"><div class="why-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-title">SEO wbudowane od początku</div><div class="why-desc">Nie doklejamy SEO na końcu. Budujemy stronę tak, żeby Google chciał ją pokazywać klientom, którzy szukają Twoich usług.</div></div></div>
-      <div class="why-item reveal reveal-delay-2"><div class="why-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-title">Wiesz co dostajesz, zanim zapłacisz</div><div class="why-desc">Pokazujemy projekt przed wdrożeniem. Widzisz dokładnie, jak będzie wyglądać Twoja strona — i możesz zgłaszać zmiany, zanim zaczniemy kodować.</div></div></div>
-      <div class="why-item reveal reveal-delay-3"><div class="why-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-title">Jeden kontakt, zero chaosu</div><div class="why-desc">Nie odbijasz się od działów i projektantów. Jedna osoba, pełna odpowiedzialność od pierwszej rozmowy do wdrożenia.</div></div></div>
-      <div class="why-item reveal reveal-delay-4"><div class="why-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="why-title">Strona, która działa — dosłownie</div><div class="why-desc">Formularze, które wysyłają maile, powiadomienia w czasie rzeczywistym, Google Analytics. Wiesz ile osób odwiedza stronę i co robią.</div></div></div>
-    </div>
-  </div>
-</section>
 
-<!-- PROCESS -->
-<section class="process">
-  <div class="section-kicker reveal">Jak to działa</div>
-  <h2 class="reveal reveal-delay-1">Od rozmowy do gotowej<br>strony — w 4 krokach.</h2>
-  <div class="process-steps">
-    <div class="step gcard reveal reveal-delay-1"><div class="step-num">01</div><div class="step-title">Rozmawiamy</div><p class="step-desc">Opowiadasz o firmie i klientach. Pytam o rzeczy, których inni nie pytają. W 24h dostajesz wycenę i termin.</p></div>
-    <div class="step gcard reveal reveal-delay-2"><div class="step-num">02</div><div class="step-title">Projektuję</div><p class="step-desc">Tworzę projekt graficzny i pomagam z tekstami. Widzisz, jak będzie wyglądać, zanim cokolwiek zapłacisz.</p></div>
-    <div class="step gcard reveal reveal-delay-3"><div class="step-num">03</div><div class="step-title">Koduję</div><p class="step-desc">Szybka, responsywna, gotowa na każde urządzenie. Informuję o postępach. Żadnych niespodzianek.</p></div>
-    <div class="step gcard reveal reveal-delay-4"><div class="step-num">04</div><div class="step-title">Oddaję i uczę</div><p class="step-desc">Wdrażam pod Twoją domenę, ustawiam SEO i Analytics. Tłumaczę jak wszystko działa. Strona jest Twoja.</p></div>
-  </div>
-</section>
+    <!-- Three.js z CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
 
-<!-- PRICING -->
-<section class="pricing">
-  <div class="section-kicker reveal">Inwestycja</div>
-  <h2 class="reveal reveal-delay-1">Jasne ceny.<br>Zero niespodzianek.</h2>
-  <div class="pricing-grid">
-    <div class="price-card gcard reveal reveal-delay-1"><div class="pc-tier">Start</div><div class="pc-price">800 <span>zł</span></div><div class="pc-sub">Dla firm, które zaczynają online</div><ul class="pc-features"><li>Strona wizytówkowa (do 4 sekcji)</li><li>Responsywna — działa na telefonie</li><li>Formularz kontaktowy + powiadomienia</li><li>Podstawowe SEO</li><li>Gotowe w 5–7 dni</li></ul><button class="pc-btn" onclick="openModal('kontakt')">Zamów →</button></div>
-    <div class="price-card gcard feat reveal reveal-delay-2"><div class="feat-badge">Najpopularniejszy</div><div class="pc-tier">Biznes</div><div class="pc-price">1500 <span>zł</span></div><div class="pc-sub">Dla firm, które chcą rosnąć</div><ul class="pc-features"><li>Pełna strona wielosekcyjna</li><li>Teksty, które sprzedają (piszemy za Ciebie)</li><li>SEO + meta tagi + schema markup</li><li>Google Analytics + mapa ciepła</li><li>Automatyzacja zgłoszeń (Make.com)</li><li>Gotowe w 7–14 dni</li></ul><button class="pc-btn" onclick="openModal('kontakt')">Zamów →</button></div>
-    <div class="price-card gcard reveal reveal-delay-3"><div class="pc-tier">Premium</div><div class="pc-price">3000 <span>zł</span></div><div class="pc-sub">Dla firm, które chcą dominować</div><ul class="pc-features"><li>Sklep, rezerwacje lub blog</li><li>Zaawansowane automatyzacje</li><li>Panel CMS — edytujesz sam</li><li>Opieka techniczna przez 3 miesiące</li><li>Raport miesięczny z wyników</li></ul><button class="pc-btn" onclick="openModal('kontakt')">Zamów →</button></div>
-  </div>
-</section>
+    <script>
+        const canvas = document.getElementById('bg');
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 0, 12);
 
-<!-- FAQ -->
-<section class="faq">
-  <div class="section-kicker reveal">Pytania i odpowiedzi</div>
-  <h2 class="reveal reveal-delay-1">Masz pytania.<br>Mamy odpowiedzi.</h2>
-  <div class="faq-list">
-    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Czy naprawdę będzie gotowe w 7 dni?</span><div class="faq-icon">+</div></div><div class="faq-a">Tak — jeśli masz materiały (logo, zdjęcia, informacje o firmie) i sprawnie akceptujesz projekt. Jeśli potrzebujesz pomocy z treściami, czas może być nieco dłuższy. Zawsze podaję realny termin przed rozpoczęciem.</div></div>
-    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Nie mam logo ani zdjęć — co wtedy?</span><div class="faq-icon">+</div></div><div class="faq-a">Żaden problem. Pomagam z doborem stockowych zdjęć, które pasują do Twojej branży. Jeśli potrzebujesz logo, mogę polecić sprawdzonego grafika lub przygotować proste logo w ramach pakietu.</div></div>
-    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Czy będę mógł sam edytować stronę?</span><div class="faq-icon">+</div></div><div class="faq-a">W pakiecie Premium wbudowany jest panel CMS — edytujesz teksty i zdjęcia bez żadnej wiedzy technicznej. W pozostałych pakietach drobne zmiany robię na bieżąco, zazwyczaj w ciągu 24h.</div></div>
-    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Co jeśli efekt mi się nie spodoba?</span><div class="faq-icon">+</div></div><div class="faq-a">Pokazuję projekt, zanim zaczynam kodować. Możesz zgłaszać poprawki bez ograniczeń na etapie projektu. Po wdrożeniu — dwie rundy poprawek gratis. Zależy mi, żebyś był zadowolony, bo buduję biznes na poleceniach.</div></div>
-    <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">Czy strona będzie widoczna w Google?</span><div class="faq-icon">+</div></div><div class="faq-a">Każda strona, którą robię, ma wbudowane podstawy SEO — meta tagi, struktura nagłówków, szybkość ładowania, schema markup. Pozycja w Google rośnie z czasem i treścią — nie obiecuję "pierwszego miejsca w tydzień", bo to niemożliwe. Obiecuję solidny start.</div></div>
-  </div>
-</section>
+        const mouse = new THREE.Vector2(0,0);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
 
-<!-- CTA -->
-<section class="cta-band">
-  <h2 class="reveal">Każdy dzień bez dobrej strony to klienci, których oddajesz konkurencji.</h2>
-  <p class="reveal reveal-delay-1">Bezpłatna wycena w ciągu 24 godzin. Bez zobowiązań, bez presji. Powiedz mi o swojej firmie — resztą się zajmę.</p>
-  <button class="btn-primary reveal reveal-delay-2" style="margin:0 auto;font-size:14px;padding:1.1rem 2.5rem" onclick="openModal('kontakt')">
-    Zacznijmy rozmowę
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-  </button>
-</section>
-
-<footer>
-  <div class="foot-logo">PROF<span>VIE</span></div>
-  <div class="foot-copy">© 2026 Profvie — Strony internetowe dla firm</div>
-</footer>
-
-</div><!-- .page -->
-
-<!-- MODAL -->
-<div class="overlay" id="overlay" onclick="handleOverlay(event)">
-  <div class="modal" id="modal">
-    <div class="modal-head">
-      <div class="modal-title" id="mTitle"></div>
-      <button class="modal-x" onclick="closeModal()">×</button>
-    </div>
-    <div class="modal-body" id="mBody"></div>
-  </div>
-</div>
-
-<script>
-/* ═══════════════════════════════
-   3D PARTICLE BACKGROUND
-═══════════════════════════════ */
-(function(){
-  const canvas = document.getElementById('bg-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H, mouse = {x:0.5, y:0.5};
-  let particles = [], lines = [], time = 0;
-
-  function resize(){
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-  window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX / W;
-    mouse.y = e.clientY / H;
-  });
-
-  // Generate particles in 3D space
-  const COUNT = window.innerWidth < 768 ? 60 : 120;
-  for(let i = 0; i < COUNT; i++){
-    particles.push({
-      x: Math.random(), y: Math.random(), z: Math.random(),
-      vx: (Math.random()-0.5)*0.0002,
-      vy: (Math.random()-0.5)*0.0002,
-      vz: (Math.random()-0.5)*0.0003,
-      size: Math.random()*1.5+0.3,
-    });
-  }
-
-  // Floating orbs
-  const orbs = [
-    {x:0.15, y:0.2, r:200, color:'rgba(80,80,140,0.07)', speed:0.0003},
-    {x:0.8,  y:0.6, r:300, color:'rgba(60,60,120,0.05)', speed:0.0002},
-    {x:0.5,  y:0.9, r:250, color:'rgba(40,40,100,0.06)', speed:0.00025},
-    {x:0.9,  y:0.1, r:180, color:'rgba(100,80,160,0.04)', speed:0.0004},
-  ];
-
-  function project(p){
-    // Perspective projection
-    const fov = 0.8;
-    const camZ = 1.5 + Math.sin(time * 0.0005) * 0.1;
-    const dz = camZ - p.z;
-    if(dz <= 0) return null;
-    const scale = fov / dz;
-    // Parallax with mouse
-    const mx = (mouse.x - 0.5) * 0.15;
-    const my = (mouse.y - 0.5) * 0.15;
-    return {
-      sx: (p.x - 0.5 + mx * p.z) * scale * W + W/2,
-      sy: (p.y - 0.5 + my * p.z) * scale * H + H/2,
-      scale: scale,
-      alpha: Math.min(1, scale * 0.6),
-    };
-  }
-
-  function draw(){
-    ctx.clearRect(0, 0, W, H);
-    time++;
-
-    // Draw orbs with slow drift
-    orbs.forEach((orb, i) => {
-      const drift = time * orb.speed;
-      const ox = (orb.x + Math.sin(drift + i) * 0.08) * W;
-      const oy = (orb.y + Math.cos(drift * 0.7 + i) * 0.06) * H;
-      const grd = ctx.createRadialGradient(ox, oy, 0, ox, oy, orb.r);
-      grd.addColorStop(0, orb.color);
-      grd.addColorStop(1, 'transparent');
-      ctx.fillStyle = grd;
-      ctx.beginPath();
-      ctx.arc(ox, oy, orb.r, 0, Math.PI*2);
-      ctx.fill();
-    });
-
-    // Grid lines perspective
-    ctx.strokeStyle = 'rgba(255,255,255,0.025)';
-    ctx.lineWidth = 1;
-    const gridTilt = mouse.x * 0.05;
-    const gridY = 0.55 + mouse.y * 0.05;
-    const horizon = gridY * H;
-    const vanishX = (0.4 + mouse.x * 0.2) * W;
-    const COLS = 14, ROWS = 10;
-    for(let c = 0; c <= COLS; c++){
-      const bx = (c/COLS) * W;
-      ctx.beginPath();
-      ctx.moveTo(bx, H);
-      ctx.lineTo(vanishX + (bx - W/2) * gridTilt, horizon);
-      ctx.stroke();
-    }
-    for(let r = 1; r <= ROWS; r++){
-      const t = Math.pow(r/ROWS, 1.5);
-      const y = horizon + (H - horizon) * t;
-      const spread = 1 - t * 0.5;
-      ctx.beginPath();
-      ctx.moveTo(vanishX - W*spread, y);
-      ctx.lineTo(vanishX + W*spread, y);
-      ctx.stroke();
-    }
-
-    // Update + draw particles
-    const projected = [];
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy; p.z += p.vz;
-      if(p.x<0)p.x=1; if(p.x>1)p.x=0;
-      if(p.y<0)p.y=1; if(p.y>1)p.y=0;
-      if(p.z<0.01)p.z=0.99; if(p.z>0.99)p.z=0.01;
-      const proj = project(p);
-      if(!proj) return;
-      projected.push({proj, p});
-      const size = p.size * proj.scale * 2.5;
-      ctx.beginPath();
-      ctx.arc(proj.sx, proj.sy, Math.max(0.3, size), 0, Math.PI*2);
-      ctx.fillStyle = `rgba(255,255,255,${proj.alpha * 0.35})`;
-      ctx.fill();
-    });
-
-    // Connection lines between nearby particles
-    ctx.lineWidth = 0.5;
-    for(let i = 0; i < projected.length; i++){
-      for(let j = i+1; j < projected.length; j++){
-        const a = projected[i].proj, b = projected[j].proj;
-        const dx = a.sx - b.sx, dy = a.sy - b.sy;
-        const dist = Math.sqrt(dx*dx+dy*dy);
-        const maxDist = W < 768 ? 80 : 120;
-        if(dist < maxDist){
-          const alpha = (1 - dist/maxDist) * 0.08;
-          ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-          ctx.beginPath();
-          ctx.moveTo(a.sx, a.sy);
-          ctx.lineTo(b.sx, b.sy);
-          ctx.stroke();
+        // Gwiazdy
+        function makeStars(count, radius, color, sizeMin, sizeMax) {
+            const geom = new THREE.BufferGeometry();
+            const pos = new Float32Array(count * 3);
+            const sizes = new Float32Array(count);
+            for (let i=0; i<count; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2*Math.random()-1);
+                const r = radius * (0.7 + Math.random()*0.6);
+                pos[i*3] = Math.cos(theta)*Math.sin(phi)*r;
+                pos[i*3+1] = Math.sin(theta)*Math.sin(phi)*r;
+                pos[i*3+2] = Math.cos(phi)*r;
+                sizes[i] = sizeMin + Math.random()*(sizeMax-sizeMin);
+            }
+            geom.setAttribute('position', new THREE.BufferAttribute(pos,3));
+            const mat = new THREE.PointsMaterial({ 
+                color, size:0.08, blending:THREE.AdditiveBlending,
+                depthWrite:false, transparent:true, opacity:0.8 
+            });
+            return new THREE.Points(geom, mat);
         }
-      }
-    }
+        const starsFar = makeStars(300, 18, 0xaaccff, 0.02, 0.06);
+        const starsNear = makeStars(150, 14, 0xffffff, 0.04, 0.09);
+        scene.add(starsFar);
+        scene.add(starsNear);
 
-    requestAnimationFrame(draw);
-  }
-  draw();
-})();
+        // Pył
+        const dustGeom = new THREE.BufferGeometry();
+        const dustPos = new Float32Array(400 * 3);
+        for (let i=0; i<400*3; i+=3) {
+            dustPos[i] = (Math.random()-0.5)*14;
+            dustPos[i+1] = (Math.random()-0.5)*7;
+            dustPos[i+2] = (Math.random()-0.5)*8 - 1;
+        }
+        dustGeom.setAttribute('position', new THREE.BufferAttribute(dustPos,3));
+        const dustMat = new THREE.PointsMaterial({ 
+            color:0x8899cc, size:0.03, blending:THREE.AdditiveBlending,
+            depthWrite:false, transparent:true, opacity:0.4 
+        });
+        const dust = new THREE.Points(dustGeom, dustMat);
+        scene.add(dust);
 
-/* ═══════════════════════════════
-   SCROLL REVEAL
-═══════════════════════════════ */
-const revealEls = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if(e.isIntersecting) e.target.classList.add('visible');
-  });
-}, {threshold: 0.1, rootMargin: '0px 0px -60px 0px'});
-revealEls.forEach(el => observer.observe(el));
+        // Chromowany napis 3D – mniejszy i płynniejszy
+        let textMesh;
+        const fontLoader = new THREE.FontLoader();
+        fontLoader.load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+            const textGeom = new THREE.TextGeometry('PROFVIE', {
+                font: font,
+                size: 1.2,
+                height: 0.15,
+                curveSegments: 20,
+                bevelEnabled: true,
+                bevelThickness: 0.02,
+                bevelSize: 0.02,
+            });
+            textGeom.center();
+            const material = new THREE.ShaderMaterial({
+                vertexShader: `
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    void main() {
+                        vNormal = normalize(normalMatrix * normal);
+                        vPosition = (modelViewMatrix * vec4(position,1.0)).xyz;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform float uTime;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    void main() {
+                        vec3 light1 = normalize(vec3(1.0,0.8,1.0));
+                        vec3 light2 = normalize(vec3(-0.5,-0.3,-1.0));
+                        vec3 normal = normalize(vNormal);
+                        float diff1 = max(dot(normal,light1),0.0);
+                        float diff2 = max(dot(normal,light2),0.0);
+                        float fresnel = pow(1.0-abs(dot(normal,normalize(-vPosition))),3.0);
+                        vec3 chromeBase = vec3(0.72,0.75,0.82);
+                        vec3 chromeDark = vec3(0.3,0.33,0.4);
+                        vec3 chromeHighlight = vec3(0.95,0.97,1.0);
+                        float env = sin(vPosition.y*4.0 + uTime*0.3)*0.5+0.5;
+                        vec3 color = mix(chromeDark, chromeBase, env);
+                        color += chromeHighlight * diff1 * 0.8;
+                        color += chromeHighlight * diff2 * 0.4;
+                        color = mix(color, chromeHighlight, fresnel*0.7);
+                        gl_FragColor = vec4(color,1.0);
+                    }
+                `,
+                uniforms: { uTime:{value:0} },
+                side: THREE.DoubleSide
+            });
+            textMesh = new THREE.Mesh(textGeom, material);
+            textMesh.position.set(0,0.1,0);
+            scene.add(textMesh);
+        });
 
-/* ═══════════════════════════════
-   MODAL
-═══════════════════════════════ */
-const WEBHOOK = 'https://hook.eu1.make.com/fuszrq6e5xxi4isud3nce5u1bjwwi9gq';
+        function animate() {
+            requestAnimationFrame(animate);
+            if (textMesh) {
+                textMesh.material.uniforms.uTime.value += 0.01;
+                textMesh.rotation.y += 0.002;
+                textMesh.rotation.x = Math.sin(Date.now()*0.0005)*0.06;
+                textMesh.rotation.z = Math.cos(Date.now()*0.0006)*0.03;
+            }
+            starsFar.rotation.y += 0.00008;
+            starsNear.rotation.y -= 0.00012;
+            dust.rotation.y += 0.0002;
+            camera.position.x += (mouse.x*1.2 - camera.position.x)*0.02;
+            camera.position.y += (-mouse.y*0.8 - camera.position.y)*0.02;
+            camera.lookAt(0,0,0);
+            renderer.render(scene, camera);
+        }
+        animate();
 
-const modals = {
-  uslugi:{title:'Usługi',body:`
-    <div class="svc-row"><div><div class="svc-name">Strona wizytówkowa</div><div class="svc-desc">Profesjonalna strona dla firm usługowych, rzemieślników, specjalistów. Szybka, responsywna, z formularzem.</div></div><div class="svc-p">od 800 zł</div></div>
-    <div class="svc-row"><div><div class="svc-name">Landing page</div><div class="svc-desc">Jedna strona z jednym celem — konwersja. Żadnych rozpraszaczy, maksimum zapytań.</div></div><div class="svc-p">od 900 zł</div></div>
-    <div class="svc-row"><div><div class="svc-name">Sklep internetowy</div><div class="svc-desc">Sprzedawaj online. Płatności, zarządzanie produktami, automatyczne zamówienia.</div></div><div class="svc-p">od 2500 zł</div></div>
-    <div class="svc-row"><div><div class="svc-name">Redesign</div><div class="svc-desc">Masz stronę, której się wstydzisz? Odświeżamy projekt bez zmiany domeny i historii SEO.</div></div><div class="svc-p">od 1200 zł</div></div>
-    <div class="svc-row"><div><div class="svc-name">SEO i pozycjonowanie</div><div class="svc-desc">Klienci szukają Cię w Google — zadbamy, żeby Cię znajdowali.</div></div><div class="svc-p">od 400 zł/mies.</div></div>
-    <button class="modal-cta" onclick="openModal('kontakt')">Chcę bezpłatną wycenę →</button>
-  `},
-  proces:{title:'Jak pracujemy',body:`
-    <div class="m-step"><div class="m-step-n">01</div><div><div class="m-step-t">Rozmowa i wycena</div><div class="m-step-d">Piszesz lub dzwonisz. Pytam o firmę, klientów i cel. W 24h masz konkretną wycenę i harmonogram.</div></div></div>
-    <div class="m-step"><div class="m-step-n">02</div><div><div class="m-step-t">Projekt graficzny</div><div class="m-step-d">Tworzę projekt i pomagam z tekstami. Widzisz wszystko, zanim zaczynam kodować. Nieograniczone poprawki na tym etapie.</div></div></div>
-    <div class="m-step"><div class="m-step-n">03</div><div><div class="m-step-t">Realizacja</div><div class="m-step-d">Koduję szybko i solidnie. Na bieżąco informuję o postępach. Żadnych znikających wykonawców.</div></div></div>
-    <div class="m-step"><div class="m-step-n">04</div><div><div class="m-step-t">Wdrożenie i przekazanie</div><div class="m-step-d">Uruchamiam pod Twoją domeną, ustawiam SEO i Analytics. Tłumaczę, jak obsługiwać. Strona jest Twoja na zawsze.</div></div></div>
-    <button class="modal-cta" onclick="openModal('kontakt')">Zacznijmy →</button>
-  `},
-  cennik:{title:'Cennik',body:`
-    <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.8">Płacisz raz. Dostajesz gotową stronę. Zero miesięcznych opłat ukrytych w regulaminie.</p>
-    <div class="m-plan" onclick="selectPlan(this)"><div class="m-plan-top"><div class="m-plan-name">START</div><div class="m-plan-price">od 800 zł</div></div><div class="m-plan-desc">Strona wizytówkowa · SEO · Formularz · 5–7 dni</div></div>
-    <div class="m-plan sel" onclick="selectPlan(this)"><div class="m-plan-top"><div class="m-plan-name">BIZNES ★ Najpopularniejszy</div><div class="m-plan-price">od 1500 zł</div></div><div class="m-plan-desc">Pełna strona · Teksty · SEO · Analytics · Automatyzacje · 7–14 dni</div></div>
-    <div class="m-plan" onclick="selectPlan(this)"><div class="m-plan-top"><div class="m-plan-name">PREMIUM</div><div class="m-plan-price">od 3000 zł</div></div><div class="m-plan-desc">Sklep / rezerwacje · Panel CMS · Opieka 3 mies.</div></div>
-    <button class="modal-cta" onclick="openModal('kontakt')">Zapytaj o wycenę →</button>
-  `},
-  kontakt:{title:'Zacznijmy rozmowę',body:`
-    <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.8">Opisz swoją firmę i czego potrzebujesz. Odpiszę w ciągu 24 godzin z konkretną propozycją.</p>
-    <div id="cfWrap">
-      <div class="cf-grid">
-        <div class="cf-f"><label>Imię i nazwisko</label><input type="text" id="cf-name" placeholder="Jan Kowalski"></div>
-        <div class="cf-f"><label>Firma</label><input type="text" id="cf-company" placeholder="Firma XYZ"></div>
-        <div class="cf-f"><label>E-mail</label><input type="email" id="cf-email" placeholder="jan@firma.pl"></div>
-        <div class="cf-f"><label>Telefon</label><input type="tel" id="cf-phone" placeholder="+48 000 000 000"></div>
-        <div class="cf-f full"><label>Czego potrzebujesz</label>
-          <select id="cf-service">
-            <option value="">Wybierz...</option>
-            <option>Strona wizytówkowa (od 800 zł)</option>
-            <option>Landing page (od 900 zł)</option>
-            <option>Sklep internetowy (od 2500 zł)</option>
-            <option>Redesign istniejącej strony</option>
-            <option>SEO / pozycjonowanie</option>
-            <option>Nie wiem — potrzebuję doradztwa</option>
-          </select>
-        </div>
-        <div class="cf-f full"><label>O firmie i celu</label><textarea id="cf-msg" placeholder="Czym się zajmujesz, kto jest Twoim klientem, co chcesz osiągnąć..."></textarea></div>
-      </div>
-      <div class="cf-err" id="cfErr"></div>
-      <button class="modal-cta" id="cfBtn" onclick="sendForm()">Wyślij — odpisuję w 24h →</button>
-      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:1rem">Lub napisz: kontakt@profvie.pl</p>
-    </div>
-  `}
-};
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
 
-function openModal(id){
-  const m=modals[id];if(!m)return;
-  document.getElementById('mTitle').textContent=m.title;
-  document.getElementById('mBody').innerHTML=m.body;
-  document.getElementById('overlay').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){
-  document.getElementById('overlay').classList.remove('open');
-  document.body.style.overflow='';
-}
-function handleOverlay(e){if(e.target===document.getElementById('overlay'))closeModal();}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-function selectPlan(el){document.querySelectorAll('.m-plan').forEach(p=>p.classList.remove('sel'));el.classList.add('sel');}
-function toggleFaq(el){
-  const item=el.parentElement;
-  const isOpen=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!isOpen)item.classList.add('open');
-}
+        document.querySelector('.logo').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top:0, behavior:'smooth' });
+        });
 
-async function sendForm(){
-  const name=document.getElementById('cf-name').value.trim();
-  const email=document.getElementById('cf-email').value.trim();
-  const company=document.getElementById('cf-company').value.trim();
-  const phone=document.getElementById('cf-phone').value.trim();
-  const service=document.getElementById('cf-service').value;
-  const message=document.getElementById('cf-msg').value.trim();
-  const err=document.getElementById('cfErr');
-  const btn=document.getElementById('cfBtn');
-  err.style.display='none';
-  if(!name){showErr('Podaj imię i nazwisko.');return;}
-  if(!email||!email.includes('@')){showErr('Podaj poprawny e-mail.');return;}
-  btn.textContent='Wysyłanie...';btn.disabled=true;
-  try{
-    const r=await fetch(WEBHOOK,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,email,company,phone,service,message})});
-    if(!r.ok)throw new Error();
-    document.getElementById('cfWrap').innerHTML=`
-      <div style="text-align:center;padding:3rem 1rem">
-        <div style="width:56px;height:56px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:1.3rem;font-weight:800;color:#fff">✓</div>
-        <div style="font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:0.5rem">Wysłano!</div>
-        <p style="color:var(--muted);font-size:0.9rem;line-height:1.8">Odezwę się w ciągu 24 godzin<br>z konkretną propozycją.</p>
-      </div>`;
-  }catch{
-    btn.textContent='Wyślij — odpisuję w 24h →';btn.disabled=false;
-    showErr('Błąd wysyłki. Napisz bezpośrednio na kontakt@profvie.pl');
-  }
-}
-function showErr(msg){const e=document.getElementById('cfErr');e.textContent=msg;e.style.display='block';}
-</script>
+        const reveals = document.querySelectorAll('.reveal');
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold:0.15 });
+        reveals.forEach(el => obs.observe(el));
+
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            btn.textContent = 'Wysyłanie...';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.textContent = 'Wysłano!';
+                this.reset();
+                setTimeout(() => { btn.textContent = 'Wyślij zapytanie'; btn.disabled = false; }, 2000);
+            }, 1500);
+        });
+    </script>
 </body>
 </html>
