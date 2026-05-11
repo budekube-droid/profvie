@@ -99,7 +99,8 @@
     .hero-badge { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.25em; color:#b0b8c8; background:rgba(200,210,230,0.08); padding:0.4rem 1.5rem; border-radius:100px; margin-bottom:2rem; border:1px solid rgba(255,255,255,0.1); }
     .hero-title { font-family:'Satoshi', sans-serif; font-size:clamp(2.8rem,7vw,5.5rem); font-weight:800; line-height:1.05; max-width:900px; margin-bottom:2rem; }
     .chrome-text { background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 20px rgba(200,210,240,0.6)); }
-    .hero-sub { font-size:1.25rem; color:var(--text-secondary); max-width:650px; margin-bottom:3rem; }
+    .hero-sub { font-size:1.25rem; color:var(--text-secondary); max-width:650px; margin-bottom:1.5rem; }
+    .hero-note { font-size:0.85rem; color: rgba(255,255,255,0.4); margin-bottom: 2.5rem; font-style: italic; }
 
     .section { padding:6rem 2rem; display:flex; flex-direction:column; align-items:center; }
     .section-label { font-size:0.7rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:#a0a8c0; background:rgba(255,255,255,0.05); padding:0.3rem 1.2rem; border-radius:100px; margin-bottom:1.5rem; }
@@ -123,7 +124,17 @@
     .contact-form { display:flex; flex-direction:column; gap:1.2rem; width:100%; max-width:550px; }
     .form-group { display:flex; flex-direction:column; gap:0.3rem; }
     .form-group label { font-size:0.7rem; font-weight:700; text-transform:uppercase; color:rgba(255,255,255,0.6); }
-    .form-group input, .form-group textarea { padding:1rem; border:1px solid rgba(255,255,255,0.15); border-radius:16px; background:rgba(255,255,255,0.05); backdrop-filter:blur(10px); color:#fff; font-family:'Inter', sans-serif; font-size:1rem; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding:1rem; border:1px solid rgba(255,255,255,0.15); border-radius:16px;
+      background:rgba(255,255,255,0.05); backdrop-filter:blur(10px); color:#fff;
+      font-family:'Inter', sans-serif; font-size:1rem;
+    }
+    .form-group select option {
+      background: #1a1a2e;
+      color: #fff;
+    }
     .reveal { opacity:0; transform:translateY(35px); transition:0.9s; }
     .reveal.visible { opacity:1; transform:translateY(0); }
     footer { text-align:center; padding:3rem; color:rgba(255,255,255,0.3); border-top:1px solid rgba(255,255,255,0.05); font-size:0.9rem; }
@@ -158,7 +169,7 @@
       .trust-bar { gap:1.5rem; }
       .trust-number { font-size:2rem; }
       .contact-form { width:100%; }
-      .form-group input, .form-group textarea { font-size:16px; padding:0.9rem; }
+      .form-group input, .form-group textarea, .form-group select { font-size:16px; padding:0.9rem; }
       footer { padding:2rem 1rem; }
     }
   </style>
@@ -177,9 +188,7 @@
         <a href="#services">Oferta</a>
         <a href="#pricing">Cennik</a>
         <a href="#contact">Kontakt</a>
-        <a href="#contact" class="btn mobile-cta-btn">Bezpłatna wycena</a>
       </div>
-      <!-- Usunięto przycisk desktopowy -->
       <div class="menu-toggle" id="menuBtn">
         <span></span><span></span><span></span>
       </div>
@@ -189,6 +198,7 @@
       <div class="hero-badge reveal">✦ Profesjonalne strony internetowe ✦</div>
       <h1 class="hero-title reveal">Strony, <span class="chrome-text">które zarabiają</span> dla Ciebie.</h1>
       <p class="hero-sub reveal">Zapomnij o szablonach. Tworzymy unikalne narzędzia sprzedaży, które przyciągają klientów i budują zaufanie do Twojej marki.</p>
+      <p class="hero-note reveal">* Dla wszystkich zainteresowanych – bezpłatna wycena w 24h</p>
       <a href="#contact" class="btn btn-primary reveal">Zacznij projekt →</a>
     </header>
 
@@ -206,7 +216,6 @@
         <div class="card reveal"><div class="card-icon">◈</div><h3 class="card-title">Strona Wizytówka</h3><p class="card-desc">Perfekcyjny wizerunek online, który wzbudza zaufanie i przyciąga klientów od pierwszego wejrzenia.</p></div>
         <div class="card reveal"><div class="card-icon">◫</div><h3 class="card-title">Landing Page</h3><p class="card-desc">Skuteczna strona nastawiona na jedną konkretną akcję – zapis, zakup lub kontakt. Maksymalna konwersja.</p></div>
         <div class="card reveal"><div class="card-icon">⬡</div><h3 class="card-title">Sklep Internetowy</h3><p class="card-desc">Kompleksowe e‑commerce z prostym panelem zarządzania, szybkimi płatnościami i przemyślanym UX.</p></div>
-      </div>
     </section>
 
     <section id="pricing" class="section">
@@ -215,7 +224,7 @@
       <div class="grid" style="max-width:1000px">
         <div class="pricing-card reveal"><div class="pricing-tier">Start</div><div class="pricing-amount">990 <span>PLN</span></div><ul class="pricing-features"><li>Projekt jednostronicowy</li><li>Responsywność mobilna</li><li>Podstawowe SEO</li><li>Szybkie uruchomienie</li></ul><a href="#contact" class="btn" style="width:100%">Wybierz Start</a></div>
         <div class="pricing-card featured reveal"><div class="pricing-tier">Business</div><div class="pricing-amount">2490 <span>PLN</span></div><ul class="pricing-features"><li>Do 5 podstron</li><li>System zarządzania treścią</li><li>Integracje social media</li><li>Wsparcie techniczne</li></ul><a href="#contact" class="btn btn-primary" style="width:100%">Najczęściej wybierany</a></div>
-        <div class="pricing-card reveal"><div class="pricing-tier">Custom</div><div class="pricing-amount">Indywidualnie</div><ul class="pricing-features"><li>Zaawansowane funkcje</li><li>Sklepy e‑commerce</li><li>Autorskie animacje</li><li>Optymalizacja konwersji</li></ul><a href="#contact" class="btn" style="width:100%">Zapytaj o wycenę</a></div>
+        <div class="pricing-card reveal"><div class="pricing-tier">Custom</div><div class="pricing-amount">Wycena</div><ul class="pricing-features"><li>Zaawansowane funkcje</li><li>Sklepy e‑commerce</li><li>Autorskie animacje</li><li>Optymalizacja konwersji</li></ul><a href="#contact" class="btn" style="width:100%">Zapytaj o wycenę</a></div>
       </div>
     </section>
 
@@ -223,9 +232,28 @@
       <span class="section-label reveal">Kontakt</span>
       <h2 class="section-title reveal">Opowiedz nam o swoim projekcie.</h2>
       <form id="projectForm" class="contact-form reveal">
-        <div class="form-group"><label>Imię i nazwisko / Firma</label><input type="text" placeholder="Jan Kowalski" required></div>
-        <div class="form-group"><label>Adres e‑mail</label><input type="email" placeholder="jan@firma.pl" required></div>
-        <div class="form-group"><label>Czego potrzebujesz?</label><textarea rows="4" placeholder="Opisz w kilku zdaniach swój pomysł..."></textarea></div>
+        <div class="form-group">
+          <label>Imię i nazwisko / Firma</label>
+          <input type="text" placeholder="Jan Kowalski" required>
+        </div>
+        <div class="form-group">
+          <label>Adres e‑mail</label>
+          <input type="email" placeholder="jan@firma.pl" required>
+        </div>
+        <div class="form-group">
+          <label>Jaki pakiet Cię interesuje?</label>
+          <select required>
+            <option value="" disabled selected>Wybierz pakiet...</option>
+            <option value="Start">Start — 990 PLN (Strona Wizytówka)</option>
+            <option value="Business">Business — 2 490 PLN (Do 5 podstron + CMS)</option>
+            <option value="Custom">Custom — Wycena indywidualna (E‑commerce, animacje)</option>
+            <option value="Nie wiem">Nie jestem pewien — doradźcie</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Czego potrzebujesz?</label>
+          <textarea rows="4" placeholder="Opisz w kilku zdaniach swój pomysł..."></textarea>
+        </div>
         <button type="submit" class="btn btn-primary" style="margin-top:0.8rem; width:100%;">Wyślij zapytanie</button>
       </form>
     </section>
@@ -234,7 +262,7 @@
   </div>
 
   <script>
-    // Natychmiastowe logo
+    // Logo
     (function() {
       var logo = document.getElementById('topLogo');
       if (logo) {
