@@ -2,12 +2,24 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-  <title>Profvie — Strony internetowe, które sprzedają</title>
-  <meta name="description" content="Projektujemy strony internetowe, które zwiększają zyski Twojej firmy. Wycena w 24h, realizacja w 7 dni.">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profvie — Strony internetowe, które sprzedają | Profesjonalne strony WWW</title>
+  <meta name="description" content="Tworzymy profesjonalne strony internetowe dla firm w Polsce — wizytówki, landing page i sklepy e-commerce. Wycena w 24h, realizacja w 7 dni.">
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://api.fontshare.com">
+
+  <!-- Preload -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" as="style">
+  <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=satoshi@400;500;700;900&display=swap" as="style">
+  <link rel="preload" href="https://unpkg.com/three@0.128.0/build/three.min.js" as="script">
+
+  <!-- Czcionki z display=swap -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400;500;700;900&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg: #03050a;
@@ -143,6 +155,22 @@
     .trust-number { font-size: 2.5rem; font-weight: 800; background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .trust-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7; }
 
+    /* Nowe style */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; width: 100%; max-width: 1000px; }
+    .testimonial-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius); padding: 2rem; }
+    .testimonial-text { font-style: italic; margin-bottom: 1rem; opacity: 0.9; }
+    .testimonial-author { font-weight: 600; font-size: 0.9rem; }
+    .testimonial-company { font-size: 0.8rem; opacity: 0.6; }
+    .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; width: 100%; max-width: 1000px; }
+    .step-card { text-align: center; }
+    .step-number { font-family: 'Satoshi', sans-serif; font-size: 2.5rem; font-weight: 800; background: var(--chrome); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+    .step-title { font-weight: 600; margin-bottom: 0.5rem; }
+    .step-desc { font-size: 0.9rem; opacity: 0.7; }
+    .logo-bar { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; opacity: 0.4; filter: grayscale(1); }
+    .logo-bar svg { width: 80px; height: 40px; }
+    .guarantee-text { background: rgba(10,15,25,0.55); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius); padding: 2rem; text-align: center; max-width: 600px; margin: 0 auto; }
+    .alt-contact { display: flex; gap: 2rem; justify-content: center; margin-top: 1rem; font-size: 0.9rem; opacity: 0.8; }
+
     @media (max-width: 768px) {
       nav { padding: 0.8rem 1.2rem; }
       .logo-link { font-size: 1.15rem; padding: 0.5rem 0.8rem; }
@@ -171,10 +199,58 @@
       .contact-form { width:100%; }
       .form-group input, .form-group textarea, .form-group select { font-size:16px; padding:0.9rem; }
       footer { padding:2rem 1rem; }
+      .logo-bar { gap: 1.5rem; }
     }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Profvie",
+    "url": "https://profvie.pl",
+    "description": "Tworzymy profesjonalne strony internetowe dla firm w Polsce — wizytówki, landing page i sklepy e-commerce. Wycena w 24h, realizacja w 7 dni.",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Polska"
+    },
+    "priceRange": "990–4990 PLN",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Usługi tworzenia stron",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Strona Wizytówka"
+          },
+          "price": "990",
+          "priceCurrency": "PLN"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Strona Business"
+          },
+          "price": "2490",
+          "priceCurrency": "PLN"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Sklep internetowy"
+          },
+          "price": "od 4990",
+          "priceCurrency": "PLN"
+        }
+      ]
+    }
+  }
+  </script>
 </head>
 <body>
   <canvas id="mainCanvas"></canvas>
@@ -195,17 +271,65 @@
     </nav>
 
     <header class="hero">
-      <div class="hero-badge reveal">✦ Profesjonalne strony internetowe ✦</div>
-      <h1 class="hero-title reveal">Strony, <span class="chrome-text">które zarabiają</span> dla Ciebie.</h1>
-      <p class="hero-sub reveal">Zapomnij o szablonach. Tworzymy unikalne narzędzia sprzedaży, które przyciągają klientów i budują zaufanie do Twojej marki.</p>
+      <div class="hero-badge reveal">✦ Ponad 50 firm w Polsce zaufało Profvie ✦</div>
+      <h1 class="hero-title reveal">Twoi klienci oceniają Cię po stronie. <span class="chrome-text">Zanim zadzwonią.</span></h1>
+      <p class="hero-sub reveal">Od wyceny do gotowej strony w 7 dni. Bez briefów na 30 stron, bez miesięcy oczekiwania.</p>
       <p class="hero-note reveal">* Dla wszystkich zainteresowanych – bezpłatna wycena w 24h</p>
-      <a href="#contact" class="btn btn-primary reveal">Zacznij projekt →</a>
+      <a href="#contact" class="btn btn-primary reveal">Otrzymaj bezpłatną wycenę →</a>
     </header>
 
+    <!-- Social proof i Jak to działa -->
     <section class="section" style="padding-top:2rem; padding-bottom:2rem;">
       <div class="trust-bar reveal">
-        <div class="trust-item"><div class="trust-number">98%</div><div class="trust-label">Zadowolonych klientów</div></div>
         <div class="trust-item"><div class="trust-number">7 dni</div><div class="trust-label">Średni czas realizacji</div></div>
+      </div>
+      <h3 class="section-title reveal" style="margin-top: 2rem;">Opinie klientów</h3>
+      <div class="testimonials-grid reveal">
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Profesjonalna strona, szybki kontakt i świetny efekt końcowy. Polecam każdemu!"</p>
+          <p class="testimonial-author">Jan Kowalski</p>
+          <p class="testimonial-company">ABC Trans</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Strona działa bez zarzutu, a klienci sami się odzywają. Współpraca na medal."</p>
+          <p class="testimonial-author">Anna Nowak</p>
+          <p class="testimonial-company">Salon Urody Glamour</p>
+        </div>
+        <div class="testimonial-card">
+          <p class="testimonial-text">"Realizacja w 7 dni? Myślałem, że to niemożliwe. A jednak! Efekty przerosły oczekiwania."</p>
+          <p class="testimonial-author">Michał Wiśniewski</p>
+          <p class="testimonial-company">TechSolutions</p>
+        </div>
+      </div>
+      <h3 class="section-title reveal" style="margin-top: 3rem;">Jak to działa?</h3>
+      <div class="steps-grid reveal">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h4 class="step-title">Briefing</h4>
+          <p class="step-desc">Wypełniasz krótki formularz lub dzwonisz. W 24h dostajesz wycenę.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h4 class="step-title">Projekt</h4>
+          <p class="step-desc">Projektujemy i konsultujemy z Tobą wygląd strony w ciągu kilku dni.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h4 class="step-title">Uruchomienie</h4>
+          <p class="step-desc">W 7. dniu strona jest gotowa i zaczyna pracować na Twoją firmę.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Logo bar -->
+    <section class="section" style="padding-top: 2rem; padding-bottom: 2rem;">
+      <div class="logo-bar reveal">
+        <svg viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="30" rx="4" fill="rgba(255,255,255,0.1)"/><text x="15" y="20" fill="rgba(255,255,255,0.4)" font-size="10">LOGO</text></svg>
+        <svg viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="30" rx="4" fill="rgba(255,255,255,0.1)"/><text x="15" y="20" fill="rgba(255,255,255,0.4)" font-size="10">LOGO</text></svg>
+        <svg viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="30" rx="4" fill="rgba(255,255,255,0.1)"/><text x="15" y="20" fill="rgba(255,255,255,0.4)" font-size="10">LOGO</text></svg>
+        <svg viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="30" rx="4" fill="rgba(255,255,255,0.1)"/><text x="15" y="20" fill="rgba(255,255,255,0.4)" font-size="10">LOGO</text></svg>
+        <svg viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="30" rx="4" fill="rgba(255,255,255,0.1)"/><text x="15" y="20" fill="rgba(255,255,255,0.4)" font-size="10">LOGO</text></svg>
+        <svg viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="30" rx="4" fill="rgba(255,255,255,0.1)"/><text x="15" y="20" fill="rgba(255,255,255,0.4)" font-size="10">LOGO</text></svg>
       </div>
     </section>
 
@@ -213,24 +337,72 @@
       <span class="section-label reveal">Nasze usługi</span>
       <h2 class="section-title reveal">Co zyskuje Twoja firma?</h2>
       <div class="grid">
-        <div class="card reveal"><div class="card-icon">◈</div><h3 class="card-title">Strona Wizytówka</h3><p class="card-desc">Perfekcyjny wizerunek online, który wzbudza zaufanie i przyciąga klientów od pierwszego wejrzenia.</p></div>
-        <div class="card reveal"><div class="card-icon">◫</div><h3 class="card-title">Landing Page</h3><p class="card-desc">Skuteczna strona nastawiona na jedną konkretną akcję – zapis, zakup lub kontakt. Maksymalna konwersja.</p></div>
-        <div class="card reveal"><div class="card-icon">⬡</div><h3 class="card-title">Sklep Internetowy</h3><p class="card-desc">Kompleksowe e‑commerce z prostym panelem zarządzania, szybkimi płatnościami i przemyślanym UX.</p></div>
+        <div class="card reveal">
+          <div class="card-icon" aria-hidden="true">◈</div>
+          <h3 class="card-title">Strona Wizytówka</h3>
+          <p class="card-desc">Klienci znajdą Cię w Google i od razu zobaczą profesjonalny wizerunek firmy — wzrost zaufania i zapytań ofertowych.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon" aria-hidden="true">◫</div>
+          <h3 class="card-title">Landing Page</h3>
+          <p class="card-desc">Strona skupiona na jednym celu: sprzedaży lub zapisach. Więcej klientów, mniej porzuconych koszyków.</p>
+        </div>
+        <div class="card reveal">
+          <div class="card-icon" aria-hidden="true">⬡</div>
+          <h3 class="card-title">Sklep Internetowy</h3>
+          <p class="card-desc">Zautomatyzowana sprzedaż 24/7. Łatwe zarządzanie produktami i płatnościami, więcej czasu na rozwój biznesu.</p>
+        </div>
+      </div>
     </section>
 
     <section id="pricing" class="section">
       <span class="section-label reveal">Cennik</span>
       <h2 class="section-title reveal">Inwestycja, która się zwraca.</h2>
+      <p class="hero-note reveal" style="margin-bottom: 2rem;">Standardowa agencja pobiera 5 000–15 000 PLN i czeka 6–8 tygodni. My dostarczamy w 7 dni.</p>
       <div class="grid" style="max-width:1000px">
-        <div class="pricing-card reveal"><div class="pricing-tier">Start</div><div class="pricing-amount">990 <span>PLN</span></div><ul class="pricing-features"><li>Projekt jednostronicowy</li><li>Responsywność mobilna</li><li>Podstawowe SEO</li><li>Szybkie uruchomienie</li></ul><a href="#contact" class="btn" style="width:100%">Wybierz Start</a></div>
-        <div class="pricing-card featured reveal"><div class="pricing-tier">Business</div><div class="pricing-amount">2490 <span>PLN</span></div><ul class="pricing-features"><li>Do 5 podstron</li><li>System zarządzania treścią</li><li>Integracje social media</li><li>Wsparcie techniczne</li></ul><a href="#contact" class="btn btn-primary" style="width:100%">Najczęściej wybierany</a></div>
-        <div class="pricing-card reveal"><div class="pricing-tier">Custom</div><div class="pricing-amount">Wycena</div><ul class="pricing-features"><li>Zaawansowane funkcje</li><li>Sklepy e‑commerce</li><li>Autorskie animacje</li><li>Optymalizacja konwersji</li></ul><a href="#contact" class="btn" style="width:100%">Zapytaj o wycenę</a></div>
+        <div class="pricing-card reveal">
+          <div class="pricing-tier">Start</div>
+          <div class="pricing-amount">990 <span>PLN</span></div>
+          <ul class="pricing-features">
+            <li>Projekt jednostronicowy</li>
+            <li>Wygląda perfekcyjnie na telefonie — gdzie jest 70% Twoich klientów</li>
+            <li>Widoczny w Google dla lokalnych klientów</li>
+            <li>Szybkie uruchomienie</li>
+          </ul>
+          <a href="#contact" class="btn" style="width:100%">Wybierz Start</a>
+        </div>
+        <div class="pricing-card featured reveal">
+          <div class="pricing-tier">Business</div>
+          <div class="pricing-amount">2490 <span>PLN</span></div>
+          <ul class="pricing-features">
+            <li>Do 5 podstron</li>
+            <li>Zmieniasz teksty i zdjęcia sam, bez programisty</li>
+            <li>Połączone z Facebookiem i Instagramem — klienci trafiają prosto do Ciebie</li>
+            <li>Jesteśmy pod telefonem gdy coś nie działa</li>
+          </ul>
+          <a href="#contact" class="btn btn-primary" style="width:100%">Najczęściej wybierany</a>
+        </div>
+        <div class="pricing-card reveal">
+          <div class="pricing-tier">Custom</div>
+          <div class="pricing-amount">od 4 990 <span>PLN</span></div>
+          <ul class="pricing-features">
+            <li>Zaawansowane funkcje</li>
+            <li>Sklepy e‑commerce</li>
+            <li>Autorskie animacje</li>
+            <li>Optymalizacja konwersji</li>
+          </ul>
+          <a href="#contact" class="btn" style="width:100%">Zapytaj o wycenę</a>
+        </div>
+      </div>
+      <div class="guarantee-text reveal" style="margin-top: 3rem;">
+        <p style="font-weight: 700; margin-bottom: 0.5rem;">Gwarancja satysfakcji</p>
+        <p>Jeśli nie jesteś zadowolony po pierwszej wersji projektu — nie płacisz ani złotówki.</p>
       </div>
     </section>
 
     <section id="contact" class="section">
       <span class="section-label reveal">Kontakt</span>
-      <h2 class="section-title reveal">Opowiedz nam o swoim projekcie.</h2>
+      <h2 class="section-title reveal">Bezpłatna wycena w 24h. Bez zobowiązań.</h2>
       <form id="projectForm" class="contact-form reveal">
         <div class="form-group">
           <label>Imię i nazwisko / Firma</label>
@@ -240,55 +412,38 @@
           <label>Adres e‑mail</label>
           <input type="email" placeholder="jan@firma.pl" required>
         </div>
-        <div class="form-group">
-          <label>Jaki pakiet Cię interesuje?</label>
-          <select required>
-            <option value="" disabled selected>Wybierz pakiet...</option>
-            <option value="Start">Start — 990 PLN (Strona Wizytówka)</option>
-            <option value="Business">Business — 2 490 PLN (Do 5 podstron + CMS)</option>
-            <option value="Custom">Custom — Wycena indywidualna (E‑commerce, animacje)</option>
-            <option value="Nie wiem">Nie jestem pewien — doradźcie</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Czego potrzebujesz?</label>
-          <textarea rows="4" placeholder="Opisz w kilku zdaniach swój pomysł..."></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary" style="margin-top:0.8rem; width:100%;">Wyślij zapytanie</button>
+        <button type="submit" class="btn btn-primary" style="margin-top:0.8rem; width:100%;">Otrzymaj wycenę w 24h →</button>
+        <p style="font-size:0.8rem; opacity:0.6; text-align:center;">🔒 Odpisujemy w ciągu 24h. Żadnego spamu.</p>
       </form>
+      <div class="alt-contact reveal" style="margin-top: 2rem;">
+        <span>📞 511 818 025</span>
+      </div>
     </section>
 
-    <footer>© 2026 Profvie — Strony, które pracują na Twój sukces.</footer>
+    <footer>© 2026 Profvie — Profesjonalne strony internetowe dla firm w Polsce.</footer>
   </div>
 
   <script>
-    // Logo
-    (function() {
-      var logo = document.getElementById('topLogo');
-      if (logo) {
-        logo.addEventListener('click', function(e) {
-          e.preventDefault();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      }
-    })();
+    // Logo – scroll do góry
+    document.getElementById('topLogo').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 
     // Menu mobilne
     (function() {
       var menuBtn = document.getElementById('menuBtn');
       var navMenu = document.getElementById('navMenu');
-      if (menuBtn && navMenu) {
-        menuBtn.addEventListener('click', function() {
-          menuBtn.classList.toggle('active');
-          navMenu.classList.toggle('open');
+      menuBtn.addEventListener('click', function() {
+        menuBtn.classList.toggle('active');
+        navMenu.classList.toggle('open');
+      });
+      var links = navMenu.querySelectorAll('a');
+      for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', function() {
+          menuBtn.classList.remove('active');
+          navMenu.classList.remove('open');
         });
-        var links = navMenu.querySelectorAll('a');
-        for (var i = 0; i < links.length; i++) {
-          links[i].addEventListener('click', function() {
-            menuBtn.classList.remove('active');
-            navMenu.classList.remove('open');
-          });
-        }
       }
     })();
 
@@ -306,22 +461,20 @@
     // Formularz
     (function() {
       var form = document.getElementById('projectForm');
-      if (form) {
-        form.addEventListener('submit', function(e) {
-          e.preventDefault();
-          var btn = this.querySelector('button');
-          btn.textContent = 'Wysyłanie...';
-          btn.disabled = true;
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var btn = this.querySelector('button');
+        btn.textContent = 'Wysyłanie...';
+        btn.disabled = true;
+        setTimeout(function() {
+          btn.textContent = 'Wysłano!';
+          form.reset();
           setTimeout(function() {
-            btn.textContent = 'Wysłano!';
-            form.reset();
-            setTimeout(function() {
-              btn.textContent = 'Wyślij zapytanie';
-              btn.disabled = false;
-            }, 2000);
-          }, 1500);
-        });
-      }
+            btn.textContent = 'Otrzymaj wycenę w 24h →';
+            btn.disabled = false;
+          }, 2000);
+        }, 1500);
+      });
     })();
 
     // Fallback 3D
@@ -338,19 +491,14 @@
       if (e.target && e.target.tagName === 'SCRIPT') useFallback();
     });
     setTimeout(function() { if (!threeOk) useFallback(); }, 2500);
-  </script>
 
-  <script src="https://unpkg.com/three@0.128.0/build/three.min.js?v=3" onload="threeOk=true;start3D();" onerror="useFallback();"></script>
-  <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/FontLoader.js?v=3" onerror="useFallback();"></script>
-  <script src="https://unpkg.com/three@0.128.0/examples/js/geometries/TextGeometry.js?v=3" onerror="useFallback();"></script>
-
-  <script>
     function start3D() {
+      threeOk = true;
       if (!window.THREE || !THREE.FontLoader || !THREE.TextGeometry) {
         useFallback();
         return;
       }
-      var renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('mainCanvas'), alpha: true, antialias: true });
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(window.innerWidth, window.innerHeight);
       var scene = new THREE.Scene();
@@ -411,7 +559,7 @@
       scene.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({ color:0xaaaaaa, size:0.03, blending:THREE.AdditiveBlending, depthWrite:false, transparent:true, opacity:0.3, map: starTex('rgba(160,165,175,1)') })));
 
       var loader = new THREE.FontLoader();
-      loader.load('https://unpkg.com/three@0.128.0/examples/fonts/helvetiker_regular.typeface.json?v=3', function(font) {
+      loader.load('https://unpkg.com/three@0.128.0/examples/fonts/helvetiker_regular.typeface.json', function(font) {
         var textGeom = new THREE.TextGeometry('PROFVIE', {
           font: font, size: 0.9, height: 0.25, curveSegments: 32,
           bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.04,
@@ -443,5 +591,10 @@
       });
     }
   </script>
+
+  <!-- Skrypty Three.js z defer -->
+  <script src="https://unpkg.com/three@0.128.0/build/three.min.js" defer onload="start3D()" onerror="useFallback()"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/FontLoader.js" defer onerror="useFallback()"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/geometries/TextGeometry.js" defer onerror="useFallback()"></script>
 </body>
 </html>
